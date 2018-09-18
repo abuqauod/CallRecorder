@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     DatabaseHandler db = new DatabaseHandler(this);
     RecordAdapter rAdapter;
     RecyclerView recycler;
+    LinearLayout mLayout;
     List<CallDetails> callDetailsList;
     boolean checkResume = false;
 
@@ -77,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
             if (!checkResume) {
                 setUi();
                 // this.callDetailsList=new DatabaseManager(this).getAllDetails();
-                rAdapter.notifyDataSetChanged();
             }
         }
     }
@@ -101,7 +102,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void setUi() {
         recycler = findViewById(R.id.main_activity_recycler);
-        recycler = findViewById(R.id.main_activity_recycler);
+        mLayout = findViewById(R.id.main_activity_no_data);
+
         callDetailsList = new DatabaseManager(this).getAllDetails();
 
         for (CallDetails cd : callDetailsList) {
@@ -111,8 +113,13 @@ public class MainActivity extends AppCompatActivity {
 
         if (callDetailsList.size() == 0) {
             recycler.setVisibility(View.GONE);
+            mLayout.setVisibility(View.VISIBLE);
         } else {
             recycler.setVisibility(View.VISIBLE);
+            mLayout.setVisibility(View.GONE);
+
+            rAdapter.notifyDataSetChanged();
+
             Collections.reverse(callDetailsList);
             rAdapter = new RecordAdapter(callDetailsList, this);
             LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
