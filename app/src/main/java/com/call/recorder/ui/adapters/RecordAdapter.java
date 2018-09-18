@@ -1,10 +1,11 @@
-package com.call.recorder;
+package com.call.recorder.ui.adapters;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.call.recorder.R;
+import com.call.recorder.helper.CommonMethods;
+import com.call.recorder.helper.Constants;
+import com.call.recorder.ui.models.CallDetails;
 
 import java.io.File;
 import java.util.List;
@@ -27,16 +33,16 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyViewHold
     private List<CallDetails> callDetails;
     private Context context;
     private SharedPreferences pref;
-    private String checkDate = "";
 
-    RecordAdapter(List<CallDetails> callDetails, Context context) {
+    public RecordAdapter(List<CallDetails> callDetails, Context context) {
         this.callDetails = callDetails;
         this.context = context;
         pref = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
+    @NonNull
     @Override
-    public RecordAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecordAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         MyViewHolder viewHolder = null;
         LayoutInflater layoutInflator = LayoutInflater.from(parent.getContext());
@@ -63,7 +69,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyViewHold
     }
 
     @Override
-    public void onBindViewHolder(RecordAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecordAdapter.MyViewHolder holder, int position) {
 
         CallDetails cd1 = callDetails.get(position);
         String n = cd1.getNum();
@@ -115,6 +121,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyViewHold
         // String checkDate=pref.getString("date","");
 
         try {
+            String checkDate = "";
             if (position != 0 && cd.getDate1().equalsIgnoreCase(callDetails.get(position - 1).getDate1())) {
                 checkDate = dt;
                 //pref.edit().putString("date",dt).apply();
@@ -150,10 +157,10 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyViewHold
 
         MyViewHolder(View itemView) {
             super(itemView);
-            date = (TextView) itemView.findViewById(R.id.date1);
-            name = (TextView) itemView.findViewById(R.id.name1);
-            number = (TextView) itemView.findViewById(R.id.num);
-            time = (TextView) itemView.findViewById(R.id.time1);
+            date = itemView.findViewById(R.id.date1);
+            name = itemView.findViewById(R.id.name1);
+            number = itemView.findViewById(R.id.num);
+            time = itemView.findViewById(R.id.time1);
         }
 
         void bind(final String dates, final String number, final String times) {

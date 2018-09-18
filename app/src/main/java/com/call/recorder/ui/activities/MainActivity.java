@@ -1,4 +1,4 @@
-package com.call.recorder;
+package com.call.recorder.ui.activities;
 
 import android.Manifest;
 import android.content.SharedPreferences;
@@ -21,6 +21,14 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.call.recorder.R;
+import com.call.recorder.helper.Constants;
+import com.call.recorder.helper.DatabaseHandler;
+import com.call.recorder.helper.DatabaseManager;
+import com.call.recorder.helper.TextView;
+import com.call.recorder.ui.adapters.RecordAdapter;
+import com.call.recorder.ui.models.CallDetails;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -30,16 +38,21 @@ public class MainActivity extends AppCompatActivity {
     final static String TAGMA = "Main Activity";
     DatabaseHandler db = new DatabaseHandler(this);
     RecordAdapter rAdapter;
-    RecyclerView recycler;
+    RecyclerView mRecycler;
     LinearLayout mLayout;
+    TextView mStartBtn;
     List<CallDetails> callDetailsList;
     boolean checkResume = false;
+    SharedPreferences mPreferences;
+    SwitchCompat mSwitchCompat;
+    View mMenuView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        initControls();
         /*StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());*/
 
@@ -60,6 +73,28 @@ public class MainActivity extends AppCompatActivity {
         //rAdapter.notifyDataSetChanged();
     }
 
+    private void initControls() {
+        mRecycler = findViewById(R.id.main_activity_recycler);
+        mLayout = findViewById(R.id.main_activity_no_data);
+        mStartBtn = findViewById(R.id.main_activity_start_btn);
+        mStartBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startRecording(!mPreferences.getBoolean(Constants.SWITCH_ON, true));
+            }
+        });
+
+        mMenuView = getLayoutInflater().inflate(R.layout.switch_layout, null, false);
+        mSwitchCompat = mMenuView.findViewById(R.id.switchCheck);
+
+    }
+
+    public void startRecording(boolean isTurnItOn) {
+        mPreferences.edit().putBoolean(Constants.SWITCH_ON, isTurnItOn).apply();
+        Toast.makeText(getApplicationContext(), getString(R.string.call_recording) + " " + (isTurnItOn ? getString(R.string.on) : getString(R.string.off)), Toast.LENGTH_LONG).show();
+        mSwitchCompat.setChecked(isTurnItOn);
+    }
+
     protected void onPause() {
         super.onPause();
         SharedPreferences pref3 = PreferenceManager.getDefaultSharedPreferences(this);
@@ -75,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         Log.e("Check", "onResume: ");
         if (checkPermission()) {
-            Toast.makeText(getApplicationContext(), "Permission already granted", Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(), "Permission already granted", Toast.LENGTH_LONG).show();
             if (!checkResume) {
                 setUi();
                 // this.callDetailsList=new DatabaseManager(this).getAllDetails();
@@ -101,9 +136,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setUi() {
-        recycler = findViewById(R.id.main_activity_recycler);
-        mLayout = findViewById(R.id.main_activity_no_data);
-
         callDetailsList = new DatabaseManager(this).getAllDetails();
 
         for (CallDetails cd : callDetailsList) {
@@ -112,20 +144,19 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (callDetailsList.size() == 0) {
-            recycler.setVisibility(View.GONE);
+            mRecycler.setVisibility(View.GONE);
             mLayout.setVisibility(View.VISIBLE);
         } else {
-            recycler.setVisibility(View.VISIBLE);
+            mRecycler.setVisibility(View.VISIBLE);
             mLayout.setVisibility(View.GONE);
 
             rAdapter.notifyDataSetChanged();
-
             Collections.reverse(callDetailsList);
             rAdapter = new RecordAdapter(callDetailsList, this);
             LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-            recycler.setLayoutManager(layoutManager);
-            recycler.setItemAnimator(new DefaultItemAnimator());
-            recycler.setAdapter(rAdapter);
+            mRecycler.setLayoutManager(layoutManager);
+            mRecycler.setItemAnimator(new DefaultItemAnimator());
+            mRecycler.setAdapter(rAdapter);
         }
     }
 
@@ -136,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
         listReq = perm.toArray(listReq);
         for (String permissions : listReq) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, permissions)) {
-                Toast.makeText(getApplicationContext(), "Phone Permissions needed for " + permissions, Toast.LENGTH_LONG);
+                Toast.makeText(getApplicationContext(), getString(R.string.phone_permissions_needed_for) + permissions, Toast.LENGTH_LONG);
             }
         }
 
@@ -162,25 +193,18 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.mainmenu, menu);
         MenuItem item = menu.findItem(R.id.mySwitch);
 
-        View view = getLayoutInflater().inflate(R.layout.switch_layout, null, false);
-
-        final SharedPreferences pref1 = PreferenceManager.getDefaultSharedPreferences(this);
-
-        SwitchCompat switchCompat = view.findViewById(R.id.switchCheck);
-        switchCompat.setChecked(pref1.getBoolean("switchOn", true));
-        switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        mSwitchCompat.setChecked(mPreferences.getBoolean(Constants.SWITCH_ON, true));
+        mSwitchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Log.d("Switch", "onCheckedChanged: " + isChecked);
                 if (isChecked) {
-                    Toast.makeText(getApplicationContext(), "Call Recorder ON", Toast.LENGTH_LONG).show();
+                    startRecording(true);
                 } else {
-                    Toast.makeText(getApplicationContext(), "Call Recorder OFF", Toast.LENGTH_LONG).show();
+                    startRecording(false);
                 }
-                pref1.edit().putBoolean("switchOn", isChecked).apply();
             }
         });
-        item.setActionView(view);
+        item.setActionView(mMenuView);
         return true;
     }
 

@@ -1,10 +1,12 @@
-package com.call.recorder;
+package com.call.recorder.helper;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
+import com.call.recorder.ui.models.CallDetails;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +19,7 @@ public class DatabaseManager {
 
     private SQLiteDatabase sqLiteDatabase;
 
-    DatabaseManager(Context activity) {
+    public DatabaseManager(Context activity) {
         sqLiteDatabase = DatabaseSingleton.getInstance(activity);
     }
 

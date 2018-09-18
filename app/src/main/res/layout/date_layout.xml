@@ -12,7 +12,7 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="10dp"
     app:cardBackgroundColor="@color/colorPrimaryDark">
-    <TextView
+    <com.call.recorder.helper.TextView
         android:id="@+id/date1"
         android:textColor="@color/white"
         android:layout_width="wrap_content"
@@ -37,14 +37,14 @@
         android:layout_height="wrap_content"
         android:padding="7dp">
 
-        <TextView
+        <com.call.recorder.helper.TextView
             android:id="@+id/name1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:layout_alignParentLeft="true"/>
 
-        <TextView
+        <com.call.recorder.helper.TextView
             android:id="@+id/num"
             android:textStyle="italic"
             android:layout_width="wrap_content"
@@ -53,7 +53,7 @@
             android:layout_below="@+id/name1"
             android:layout_marginLeft="5dp"/>
 
-        <TextView
+        <com.call.recorder.helper.TextView
             android:id="@+id/time1"
             android:textStyle="italic"
             android:layout_width="wrap_content"

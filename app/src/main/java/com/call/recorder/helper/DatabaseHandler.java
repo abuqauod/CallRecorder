@@ -1,4 +1,4 @@
-package com.call.recorder;
+package com.call.recorder.helper;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -20,7 +20,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     static final int DATABASE_VERSION = 2;
 
 
-    DatabaseHandler(Context context) {
+    public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 

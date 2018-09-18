@@ -1,10 +1,12 @@
-package com.call.recorder;
+package com.call.recorder.ui.models;
+
+import java.io.Serializable;
 
 /**
  * Created by VS00481543 on 01-11-2017.
  */
 
-public class CallDetails {
+public class CallDetails implements Serializable {
 
     private int serial;
     private String num;
@@ -12,10 +14,10 @@ public class CallDetails {
     private String time;
     private String date;
 
-    CallDetails() {
+    public CallDetails() {
     }
 
-    CallDetails(int serial, String num, String time, String date) {
+    public CallDetails(int serial, String num, String time, String date) {
         this.serial = serial;
         this.num = num;
         //this.name=name;

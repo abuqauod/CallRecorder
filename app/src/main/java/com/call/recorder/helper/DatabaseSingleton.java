@@ -1,4 +1,4 @@
-package com.call.recorder;
+package com.call.recorder.helper;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

@@ -1,4 +1,4 @@
-package com.call.recorder;
+package com.call.recorder.helper;
 
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
@@ -12,6 +12,8 @@ import android.support.annotation.RequiresApi;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.call.recorder.ui.models.CallDetails;
 
 import java.util.List;
 import java.util.Objects;
@@ -34,7 +36,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 
-        Boolean switchCheckOn = pref.getBoolean("switchOn", true);
+        Boolean switchCheckOn = pref.getBoolean(Constants.SWITCH_ON, true);
         if (switchCheckOn) {
             try {
                 System.out.println("Receiver Start");

@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">مسجل المكالمات</string>
+    <string name="no_data">لا يوجد سجلات</string>
+    <string name="start_recording_call">ابدأ بتسجيل مكالماتك</string>
+    <string name="call_recording">تسجيل المكالمات</string>
+    <string name="on">فعال</string>
+    <string name="off">غير فعال</string>
+    <string name="phone_permissions_needed_for">أذونات الهاتف اللازمة ل</string>
+</resources>

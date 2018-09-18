@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:background="@drawable/gradiant_background"
-                android:gravity="center"
-                tools:context=".MainActivity">
+                android:background="@color/white"
+                android:gravity="center">
 
     <LinearLayout
         android:id="@+id/main_activity_no_data"
@@ -14,7 +12,8 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="visible">
 
         <ImageView
             android:layout_width="match_parent"
@@ -22,13 +21,19 @@
             android:contentDescription="@string/app_name"
             android:src="@drawable/ic_mic_off_black_24dp"/>
 
-        <TextView
+        <com.call.recorder.helper.TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="16dp"
             android:text="@string/no_data"
-            android:textColor="@color/white"
-            android:textSize="18sp"/>
+             android:textSize="18sp"/>
+
+        <com.call.recorder.helper.TextView
+            android:id="@+id/main_activity_start_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/start_recording_call"
+            android:theme="@style/my_button"/>
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
