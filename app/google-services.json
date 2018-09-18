@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "773991241560",
+    "firebase_url": "https://callrecorder-ddbe3.firebaseio.com",
+    "project_id": "callrecorder-ddbe3",
+    "storage_bucket": "callrecorder-ddbe3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:773991241560:android:b938f04d79238475",
+        "android_client_info": {
+          "package_name": "com.call.recorder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "773991241560-17j7qq2dh32eruo5s45adfssp1r5beit.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.call.recorder",
+            "certificate_hash": "aa1167a70f5b41975d8e584596cc9c2773a601e0"
+          }
+        },
+        {
+          "client_id": "773991241560-t9n42lridccj6iph5j5av0nrkn23h4hr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAe4DX0CQBNzTpZW8YBn0Q0eGim1WN8qbo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "773991241560-t9n42lridccj6iph5j5av0nrkn23h4hr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
