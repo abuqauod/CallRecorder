@@ -28,13 +28,13 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".helper.PhoneStateReceiver">
+        <receiver android:name=".ui.services.PhoneStateReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE"/>
             </intent-filter>
         </receiver>
 
-        <service android:name=".helper.RecorderService"/>
+        <service android:name=".ui.services.RecorderService"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"

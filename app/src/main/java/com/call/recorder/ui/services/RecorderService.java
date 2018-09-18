@@ -1,4 +1,4 @@
-package com.call.recorder.helper;
+package com.call.recorder.ui.services;
 
 import android.app.Service;
 import android.content.Intent;
@@ -6,6 +6,9 @@ import android.media.MediaRecorder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
+
+import com.call.recorder.helper.CommonMethods;
+import com.call.recorder.helper.Constants;
 
 import java.io.IOException;
 

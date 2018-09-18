@@ -44,28 +44,25 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyViewHold
     @Override
     public RecordAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        MyViewHolder viewHolder = null;
-        LayoutInflater layoutInflator = LayoutInflater.from(parent.getContext());
+        LayoutInflater mLayoutInflater = LayoutInflater.from(parent.getContext());
 
         switch (viewType) {
             case 0:
-                View v1 = layoutInflator.inflate(R.layout.record_list, parent, false);
-                viewHolder = new MyViewHolder(v1);
-                break;
-            /*case 1:
-                View v2 = layoutInflator.inflate(R.layout.record_noname_list, parent, false);
+                View v1 = mLayoutInflater.inflate(R.layout.record_list, parent, false);
+                return new MyViewHolder(v1);
+             /*case 1:
+                View v2 = mLayoutInflater.inflate(R.layout.record_noname_list, parent, false);
                 viewHolder = new MyViewHolder(v2);
                 break;*/
             case 2:
-                View v3 = layoutInflator.inflate(R.layout.date_layout, parent, false);
-                viewHolder = new MyViewHolder(v3);
-                break;
-            /*case 3:
-                View v4 = layoutInflator.inflate(R.layout.date_noname_layout, parent, false);
+                View v3 = mLayoutInflater.inflate(R.layout.date_layout, parent, false);
+                return new MyViewHolder(v3);
+             /*case 3:
+                View v4 = mLayoutInflater.inflate(R.layout.date_noname_layout, parent, false);
                 viewHolder = new MyViewHolder(v4);
                 break;*/
         }
-        return viewHolder;
+        return null;
     }
 
     @Override

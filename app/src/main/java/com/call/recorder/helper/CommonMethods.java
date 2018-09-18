@@ -57,7 +57,7 @@ public class CommonMethods {
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH) + 1;
         int day = cal.get(Calendar.DATE);
-        String date = String.valueOf(day) + "_" + String.valueOf(month) + "_" + String.valueOf(year);
+        String date = String.valueOf(day) + "/" + String.valueOf(month) + "/" + String.valueOf(year);
 
         Log.d(TAGCM, "Date " + date);
         return date;

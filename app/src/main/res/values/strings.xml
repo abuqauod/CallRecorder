@@ -6,4 +6,5 @@
     <string name="on">ON</string>
     <string name="off">OFF</string>
     <string name="phone_permissions_needed_for">Phone Permissions needed for</string>
+    <string name="call_recording_on">Recording calls: Active</string>
 </resources>

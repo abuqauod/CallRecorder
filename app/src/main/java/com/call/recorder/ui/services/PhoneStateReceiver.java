@@ -1,4 +1,4 @@
-package com.call.recorder.helper;
+package com.call.recorder.ui.services;
 
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
@@ -13,6 +13,9 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.call.recorder.helper.CommonMethods;
+import com.call.recorder.helper.Constants;
+import com.call.recorder.helper.DatabaseManager;
 import com.call.recorder.ui.models.CallDetails;
 
 import java.util.List;
@@ -73,7 +76,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
                         //name=new CommonMethods().getContactName(phoneNumber,context);
 
                         int serialNumber = pref.getInt("serialNumData", 1);
-                        new DatabaseManager(context).addCallDetails(new CallDetails(serialNumber, phoneNumber, new CommonMethods().getTIme(), new CommonMethods().getDate()));
+                        new DatabaseManager(context).addCallDetails(new CallDetails(serialNumber, phoneNumber, new CommonMethods().getTIme(), new CommonMethods().getDate().replace("\\", "_")));
 
                         List<CallDetails> list = new DatabaseManager(context).getAllDetails();
                         for (CallDetails cd : list) {

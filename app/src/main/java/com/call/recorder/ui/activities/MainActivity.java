@@ -26,6 +26,7 @@ import com.call.recorder.helper.Constants;
 import com.call.recorder.helper.DatabaseHandler;
 import com.call.recorder.helper.DatabaseManager;
 import com.call.recorder.helper.TextView;
+import com.call.recorder.helper.animations.RotateAnimation;
 import com.call.recorder.ui.adapters.RecordAdapter;
 import com.call.recorder.ui.models.CallDetails;
 
@@ -86,13 +87,14 @@ public class MainActivity extends AppCompatActivity {
 
         mMenuView = getLayoutInflater().inflate(R.layout.switch_layout, null, false);
         mSwitchCompat = mMenuView.findViewById(R.id.switchCheck);
-
+        startRecording(mPreferences.getBoolean(Constants.SWITCH_ON, true));
     }
 
     public void startRecording(boolean isTurnItOn) {
         mPreferences.edit().putBoolean(Constants.SWITCH_ON, isTurnItOn).apply();
-        Toast.makeText(getApplicationContext(), getString(R.string.call_recording) + " " + (isTurnItOn ? getString(R.string.on) : getString(R.string.off)), Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), getString(R.string.call_recording) + " " + (isTurnItOn ? getString(R.string.on) : getString(R.string.off)), Toast.LENGTH_SHORT).show();
         mSwitchCompat.setChecked(isTurnItOn);
+        mStartBtn.setText(isTurnItOn ? getString(R.string.call_recording_on) : getString(R.string.start_recording_call));
     }
 
     protected void onPause() {
@@ -112,6 +114,9 @@ public class MainActivity extends AppCompatActivity {
         if (checkPermission()) {
             //Toast.makeText(getApplicationContext(), "Permission already granted", Toast.LENGTH_LONG).show();
             if (!checkResume) {
+                if (rAdapter != null)
+                    rAdapter.notifyDataSetChanged();
+
                 setUi();
                 // this.callDetailsList=new DatabaseManager(this).getAllDetails();
             }
@@ -150,13 +155,13 @@ public class MainActivity extends AppCompatActivity {
             mRecycler.setVisibility(View.VISIBLE);
             mLayout.setVisibility(View.GONE);
 
-            rAdapter.notifyDataSetChanged();
             Collections.reverse(callDetailsList);
             rAdapter = new RecordAdapter(callDetailsList, this);
             LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
             mRecycler.setLayoutManager(layoutManager);
             mRecycler.setItemAnimator(new DefaultItemAnimator());
             mRecycler.setAdapter(rAdapter);
+            RotateAnimation.create().with(mRecycler).setRepeatCount(RotateAnimation.INFINITE).setRepeatMode(RotateAnimation.RESTART).setDuration(2000).start();
         }
     }
 
