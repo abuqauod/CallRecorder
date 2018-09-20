@@ -1,69 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_margin="5dp"
               android:orientation="vertical">
 
-
-    <android.support.v7.widget.CardView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        app:cardBackgroundColor="@color/colorPrimaryDark">
+        android:layout_gravity="center"
+        android:gravity="center">
 
         <com.call.recorder.helper.TextView
-            android:id="@+id/date1"
+            android:id="@+id/item_list_date1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="7dp"
-            android:textColor="@color/white"
-            android:textStyle="bold"/>
-    </android.support.v7.widget.CardView>
+            android:layout_marginTop="0dp"
+            android:paddingBottom="0dp"
+            android:paddingEnd="4dp"
+            android:paddingStart="0dp"
+            android:paddingTop="8dp"
+            android:textColor="@color/grey"
+            android:textStyle="bold"
+            tools:text="16 September 2019"/>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.2dp"
+            android:background="@color/grey"/>
+    </LinearLayout>
 
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:padding="10dp">
+        android:padding="8dp">
 
-        <RelativeLayout
+        <com.call.recorder.helper.TextView
+            android:id="@+id/item_list_avatar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:background="@mipmap/man"
+            android:contentDescription="@string/app_name"
+            android:gravity="center"
+            android:textSize="19sp"
+            />
+
+        <LinearLayout
+            android:id="@+id/cont"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/item_list_avatar"
+            android:layout_toStartOf="@id/item_list_time1"
+            android:orientation="vertical"
+            android:paddingEnd="4dp"
+            android:paddingStart="24dp">
+
+            <com.call.recorder.helper.TextView
+                android:id="@+id/item_list_name1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                tools:text="name1"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/ic_call_made_black_24dp"/>
+
+                <com.call.recorder.helper.TextView
+                    android:id="@+id/item_list_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:gravity="center"
+                    android:textColor="@color/grey"
+                    android:textStyle="italic"
+                    tools:text="num"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <com.call.recorder.helper.TextView
+            android:id="@+id/item_list_time1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="7dp">
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:textColor="@color/grey"
+            android:textStyle="italic"
+            tools:text="time1"/>
 
-            <com.call.recorder.helper.TextView
-                android:id="@+id/name1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:textStyle="bold"/>
-
-            <com.call.recorder.helper.TextView
-                android:id="@+id/num"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/name1"
-                android:layout_marginStart="5dp"
-                android:textStyle="italic"/>
-
-            <com.call.recorder.helper.TextView
-                android:id="@+id/time1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_below="@+id/name1"
-                android:layout_marginEnd="5dp"
-                android:textStyle="italic"/>
-
-        </RelativeLayout>
-
-    </android.support.v7.widget.CardView>
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.2dp"
+            android:layout_below="@+id/cont"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@id/item_list_avatar"
+            android:background="@color/grey"
+            android:paddingEnd="0dp"
+            android:paddingStart="40dp"/>
+    </RelativeLayout>
 </LinearLayout>

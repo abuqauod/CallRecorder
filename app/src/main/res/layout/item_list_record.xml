@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+    <com.call.recorder.helper.TextView
+        android:id="@+id/item_list_avatar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:background="@mipmap/man"
+        android:contentDescription="@string/app_name"
+        android:gravity="center"
+        android:textSize="19sp"/>
+
+    <LinearLayout
+        android:id="@+id/cont"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/item_list_avatar"
+        android:layout_toStartOf="@id/item_list_time1"
+        android:orientation="vertical"
+        android:paddingEnd="4dp"
+        android:paddingStart="24dp">
+
+        <com.call.recorder.helper.TextView
+            android:id="@+id/item_list_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            tools:text="name1"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_call_made_black_24dp"/>
+
+            <com.call.recorder.helper.TextView
+                android:id="@+id/item_list_name1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:gravity="center"
+                android:textColor="@color/grey"
+                android:textStyle="italic"
+                tools:text="num"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <com.call.recorder.helper.TextView
+        android:id="@+id/item_list_time1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:textColor="@color/grey"
+        android:textStyle="italic"
+        tools:text="time1"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.2dp"
+        android:layout_below="@+id/cont"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@id/item_list_avatar"
+        android:background="@color/grey"
+        android:paddingEnd="0dp"
+        android:paddingStart="40dp"/>
+</RelativeLayout>

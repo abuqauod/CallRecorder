@@ -5,7 +5,7 @@
     android:layout_margin="5dp">
 
     <com.call.recorder.helper.TextView
-        android:id="@+id/date1"
+        android:id="@+id/item_list_date1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
@@ -21,7 +21,7 @@
             android:padding="7dp">
 
             <com.call.recorder.helper.TextView
-                android:id="@+id/num"
+                android:id="@+id/item_list_num"
                 android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -29,7 +29,7 @@
                 android:layout_marginStart="5dp"/>
 
             <com.call.recorder.helper.TextView
-                android:id="@+id/time1"
+                android:id="@+id/item_list_time1"
                 android:textStyle="italic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -26,7 +26,6 @@ import com.call.recorder.helper.Constants;
 import com.call.recorder.helper.DatabaseHandler;
 import com.call.recorder.helper.DatabaseManager;
 import com.call.recorder.helper.TextView;
-import com.call.recorder.helper.animations.RotateAnimation;
 import com.call.recorder.ui.adapters.RecordAdapter;
 import com.call.recorder.ui.models.CallDetails;
 
@@ -161,7 +160,6 @@ public class MainActivity extends AppCompatActivity {
             mRecycler.setLayoutManager(layoutManager);
             mRecycler.setItemAnimator(new DefaultItemAnimator());
             mRecycler.setAdapter(rAdapter);
-            RotateAnimation.create().with(mRecycler).setRepeatCount(RotateAnimation.INFINITE).setRepeatMode(RotateAnimation.RESTART).setDuration(2000).start();
         }
     }
 

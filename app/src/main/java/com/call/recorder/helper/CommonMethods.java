@@ -38,8 +38,8 @@ public class CommonMethods {
 
     public String getPath() {
         String internalFile = getDate();
-        File file = new File(Environment.getExternalStorageDirectory() + "/My Records/");
-        File file1 = new File(Environment.getExternalStorageDirectory() + "/My Records/" + internalFile + "/");
+        File file = new File((Environment.getExternalStorageDirectory() + "") + Constants._file_location);
+        File file1 = new File((Environment.getExternalStorageDirectory() + "") + Constants._file_location + internalFile + "/");
         if (!file.exists()) {
             file.mkdir();
         }

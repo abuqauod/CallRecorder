@@ -10,14 +10,15 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
-    static final String DATABASE_NAME = "callRecords";
+    private static final String DATABASE_NAME = "callRecords";
     static final String TABLE_RECORD = "callRecord";
     static final String SERIAL_NUMBER = "serialNumber";
     static final String PHONE_NUMBER = "phoneNumber";
     // public static final String CONTACT_NAME="contactName";
     static final String TIME = "time";
     static final String DATE = "date";
-    static final int DATABASE_VERSION = 2;
+    static final String CALL_TYPE = "callType";
+    private static final int DATABASE_VERSION = 3;
 
 
     public DatabaseHandler(Context context) {
@@ -27,7 +28,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        String CREATE_LOG_TABLE = "CREATE TABLE " + TABLE_RECORD + "(" + SERIAL_NUMBER + " INTEGER PRIMARY KEY," + PHONE_NUMBER + " TEXT," + TIME + " TEXT," + DATE + " TEXT" + ")";
+        String CREATE_LOG_TABLE = "CREATE TABLE " + TABLE_RECORD + "(" + SERIAL_NUMBER + " INTEGER PRIMARY KEY,"
+                + PHONE_NUMBER + " TEXT,"
+                + TIME + " TEXT,"
+                + DATE + " TEXT,"
+                + CALL_TYPE + " TEXT" + ")";
 
         db.execSQL(CREATE_LOG_TABLE);
     }

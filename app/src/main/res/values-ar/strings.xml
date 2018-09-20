@@ -7,4 +7,5 @@
     <string name="off">غير فعال</string>
     <string name="phone_permissions_needed_for">أذونات الهاتف اللازمة ل</string>
     <string name="call_recording_on">تم تفعيل تسجيل المكالمات</string>
+    <string name="unsaved">غير محفوظ</string>
 </resources>

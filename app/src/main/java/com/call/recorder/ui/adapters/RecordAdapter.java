@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -48,7 +49,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyViewHold
 
         switch (viewType) {
             case 0:
-                View v1 = mLayoutInflater.inflate(R.layout.record_list, parent, false);
+                View v1 = mLayoutInflater.inflate(R.layout.item_list_record, parent, false);
                 return new MyViewHolder(v1);
              /*case 1:
                 View v2 = mLayoutInflater.inflate(R.layout.record_noname_list, parent, false);
@@ -71,7 +72,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyViewHold
         CallDetails cd1 = callDetails.get(position);
         String n = cd1.getNum();
         String name = new CommonMethods().getContactName(n, context);
-        String name2 = "Unknown";
+        String name2 = context.getString(R.string.unsaved);
         Log.d("Names", "onBindViewHolder: " + name);
         holder.bind(cd1.getDate1(), cd1.getNum(), cd1.getTime1());
         switch (getItemViewType(position)) {
@@ -79,9 +80,12 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyViewHold
                 if (name != null && !name.equals("")) {
                     holder.name.setText(name);
                     holder.name.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
+                    holder.avatar.setBackground(ContextCompat.getDrawable(context, R.mipmap.man));
                 } else {
                     holder.name.setText(name2);
                     holder.name.setTextColor(context.getResources().getColor(R.color.red));
+                    holder.avatar.setBackground(ContextCompat.getDrawable(context, R.drawable.circle_grey));
+                    holder.avatar.setText(String.valueOf(name2.charAt(0)));
                 }
                 holder.number.setText(callDetails.get(position).getNum());
                 holder.time.setText(callDetails.get(position).getTime1());
@@ -95,9 +99,12 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyViewHold
                 if (name != null && !name.equals("")) {
                     holder.name.setText(name);
                     holder.name.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
+                    holder.avatar.setBackground(ContextCompat.getDrawable(context, R.mipmap.man));
                 } else {
                     holder.name.setText(name2);
                     holder.name.setTextColor(context.getResources().getColor(R.color.red));
+                    holder.avatar.setBackground(ContextCompat.getDrawable(context, R.drawable.circle_grey));
+                    holder.avatar.setText(String.valueOf(name2.charAt(0)));
                 }
                 holder.number.setText(callDetails.get(position).getNum());
                 holder.time.setText(callDetails.get(position).getTime1());
@@ -150,14 +157,15 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyViewHold
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView number, time, date, name;
+        TextView number, time, date, name, avatar;
 
         MyViewHolder(View itemView) {
             super(itemView);
-            date = itemView.findViewById(R.id.date1);
-            name = itemView.findViewById(R.id.name1);
-            number = itemView.findViewById(R.id.num);
-            time = itemView.findViewById(R.id.time1);
+            date = itemView.findViewById(R.id.item_list_date1);
+            name = itemView.findViewById(R.id.item_list_name1);
+            number = itemView.findViewById(R.id.item_list_num);
+            time = itemView.findViewById(R.id.item_list_time1);
+            avatar = itemView.findViewById(R.id.item_list_avatar);
         }
 
         void bind(final String dates, final String number, final String times) {
@@ -167,14 +175,14 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyViewHold
 
                     Toast.makeText(context, "Clicked on " + number, Toast.LENGTH_SHORT).show();
 
-                    String path = Environment.getExternalStorageDirectory() + "/My Records/" + dates + "/" + number + "_" + times + Constants._file_format;
+                    String path = (Environment.getExternalStorageDirectory()+"") + Constants._file_location + dates + "/" + number + "_" + times + Constants._file_format;
                     Log.d("path", "onClick: " + path);
                     //                    Uri uri = Uri.parse(path);
                     Intent intent = new Intent(Intent.ACTION_VIEW);
                     File file = new File(path);
                     //                    intent.setDataAndType(Uri.fromFile(file), "audio/*");
                     intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    intent.setDataAndType(getUriForFile(context, "com.example.vs00481543.phonecallrecorder", file), "audio/*");
+                    intent.setDataAndType(getUriForFile(context, Constants.PACKAGE_NAME, file), "audio/*");
                     context.startActivity(intent);
 
                     pref.edit().putBoolean("pauseStateVLC", true).apply();

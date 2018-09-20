@@ -32,6 +32,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
     public static String phoneNumber;
     public static String name;
     static Boolean recordStarted;
+    String type;
 
     @SuppressLint("UnsafeProtectedBroadcastReceiver")
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -51,12 +52,14 @@ public class PhoneStateReceiver extends BroadcastReceiver {
                 Toast.makeText(context, "Call detected(Incoming/Outgoing) " + state, Toast.LENGTH_SHORT).show();
 
                 if (Objects.equals(state, TelephonyManager.EXTRA_STATE_RINGING)) {
+                    //income call
+
                     Log.d(TAG1, " Inside " + state);
                 /*int j=pref.getInt("numOfCalls",0);
                 pref.edit().putInt("numOfCalls",++j).apply();
                 Log.d(TAG, "onReceive: num of calls "+ pref.getInt("numOfCalls",0));*/
                 } else if (Objects.equals(state, TelephonyManager.EXTRA_STATE_OFFHOOK)/*&& pref.getInt("numOfCalls",1)==1*/) {
-
+                    //outgoing call
                     int j = pref.getInt("numOfCalls", 0);
                     pref.edit().putInt("numOfCalls", ++j).apply();
                     Log.d(TAG, "onReceive: num of calls " + pref.getInt("numOfCalls", 0));
@@ -76,7 +79,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
                         //name=new CommonMethods().getContactName(phoneNumber,context);
 
                         int serialNumber = pref.getInt("serialNumData", 1);
-                        new DatabaseManager(context).addCallDetails(new CallDetails(serialNumber, phoneNumber, new CommonMethods().getTIme(), new CommonMethods().getDate().replace("\\", "_")));
+                        new DatabaseManager(context).addCallDetails(new CallDetails(serialNumber, phoneNumber, new CommonMethods().getTIme(), new CommonMethods().getDate().replace("\\", "_"),type));
 
                         List<CallDetails> list = new DatabaseManager(context).getAllDetails();
                         for (CallDetails cd : list) {
