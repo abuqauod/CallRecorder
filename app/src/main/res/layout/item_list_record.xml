@@ -44,6 +44,7 @@
             android:orientation="horizontal">
 
             <ImageView
+                android:id="@+id/item_list_call_type"
                 android:layout_width="12dp"
                 android:layout_height="12dp"
                 android:contentDescription="@string/app_name"

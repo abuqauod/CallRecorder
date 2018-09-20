@@ -39,6 +39,7 @@ public class RecorderService extends Service {
         recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
 
         recorder.setOutputFile(rec);
+        Log.d(TAGS, "onStartCommand: " + path);
 
         try {
             recorder.prepare();

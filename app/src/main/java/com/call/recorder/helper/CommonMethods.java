@@ -16,8 +16,8 @@ import java.util.Calendar;
 
 public class CommonMethods {
 
-    private final String TAGCM = "Inside Service";
-    private Calendar cal = Calendar.getInstance();
+    final String TAGCM = "Inside Service";
+    Calendar cal = Calendar.getInstance();
 
     public String getTIme() {
         String am_pm = "";
@@ -30,7 +30,7 @@ public class CommonMethods {
         else if (amPm == 0)
             am_pm = "AM";
 
-        String time = String.valueOf(hr) + ":" + String.valueOf(min) + ":" + String.valueOf(sec) + "__" + am_pm;
+        String time = String.valueOf(hr) + ":" + String.valueOf(min) + ":" + String.valueOf(sec) + " " + am_pm;
 
         Log.d(TAGCM, "Date " + time);
         return time;
@@ -38,8 +38,8 @@ public class CommonMethods {
 
     public String getPath() {
         String internalFile = getDate();
-        File file = new File((Environment.getExternalStorageDirectory() + "") + Constants._file_location);
-        File file1 = new File((Environment.getExternalStorageDirectory() + "") + Constants._file_location + internalFile + "/");
+        File file = new File(Environment.getExternalStorageDirectory() + "/My Records/");
+        File file1 = new File(Environment.getExternalStorageDirectory() + "/My Records/" + internalFile + "/");
         if (!file.exists()) {
             file.mkdir();
         }
@@ -57,7 +57,7 @@ public class CommonMethods {
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH) + 1;
         int day = cal.get(Calendar.DATE);
-        String date = String.valueOf(day) + "/" + String.valueOf(month) + "/" + String.valueOf(year);
+        String date = String.valueOf(day) + "_" + String.valueOf(month) + "_" + String.valueOf(year);
 
         Log.d(TAGCM, "Date " + date);
         return date;

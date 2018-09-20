@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -78,41 +79,41 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyViewHold
         switch (getItemViewType(position)) {
             case 0:
                 if (name != null && !name.equals("")) {
-                    holder.name.setText(name);
-                    holder.name.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
-                    holder.avatar.setBackground(ContextCompat.getDrawable(context, R.mipmap.man));
+                    holder.mName.setText(name);
+                    holder.mName.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
+                    holder.mAvatar.setBackground(ContextCompat.getDrawable(context, R.mipmap.man));
                 } else {
-                    holder.name.setText(name2);
-                    holder.name.setTextColor(context.getResources().getColor(R.color.red));
-                    holder.avatar.setBackground(ContextCompat.getDrawable(context, R.drawable.circle_grey));
-                    holder.avatar.setText(String.valueOf(name2.charAt(0)));
+                    holder.mName.setText(name2);
+                    holder.mName.setTextColor(context.getResources().getColor(R.color.red));
+                    holder.mAvatar.setBackground(ContextCompat.getDrawable(context, R.drawable.circle_grey));
+                    holder.mAvatar.setText(String.valueOf(name2.charAt(0)));
                 }
-                holder.number.setText(callDetails.get(position).getNum());
-                holder.time.setText(callDetails.get(position).getTime1());
+                holder.mNumber.setText(callDetails.get(position).getNum());
+                holder.mTime.setText(callDetails.get(position).getTime1());
                 break;
             /*case 1:
-                holder.number.setText(callDetails.get(position).getNum());
-                holder.time.setText(callDetails.get(position).getTime1());
+                holder.mNumber.setText(callDetails.get(position).getNum());
+                holder.mTime.setText(callDetails.get(position).getTime1());
                 break;*/
             case 2:
-                holder.date.setText(callDetails.get(position).getDate1());
+                holder.mDate.setText(callDetails.get(position).getDate1().replace("_", "/"));
                 if (name != null && !name.equals("")) {
-                    holder.name.setText(name);
-                    holder.name.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
-                    holder.avatar.setBackground(ContextCompat.getDrawable(context, R.mipmap.man));
+                    holder.mName.setText(name);
+                    holder.mName.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
+                    holder.mAvatar.setBackground(ContextCompat.getDrawable(context, R.mipmap.man));
                 } else {
-                    holder.name.setText(name2);
-                    holder.name.setTextColor(context.getResources().getColor(R.color.red));
-                    holder.avatar.setBackground(ContextCompat.getDrawable(context, R.drawable.circle_grey));
-                    holder.avatar.setText(String.valueOf(name2.charAt(0)));
+                    holder.mName.setText(name2);
+                    holder.mName.setTextColor(context.getResources().getColor(R.color.red));
+                    holder.mAvatar.setBackground(ContextCompat.getDrawable(context, R.drawable.circle_grey));
+                    holder.mAvatar.setText(String.valueOf(name2.charAt(0)));
                 }
-                holder.number.setText(callDetails.get(position).getNum());
-                holder.time.setText(callDetails.get(position).getTime1());
+                holder.mNumber.setText(callDetails.get(position).getNum());
+                holder.mTime.setText(callDetails.get(position).getTime1());
                 break;
             /*case 3:
-                holder.date.setText(callDetails.get(position).getDate1());
-                holder.number.setText(callDetails.get(position).getNum());
-                holder.time.setText(callDetails.get(position).getTime1());
+                holder.mDate.setText(callDetails.get(position).getDate1());
+                holder.mNumber.setText(callDetails.get(position).getNum());
+                holder.mTime.setText(callDetails.get(position).getTime1());
                 break;*/
         }
     }
@@ -121,15 +122,15 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyViewHold
         CallDetails cd = callDetails.get(position);
         String dt = cd.getDate1();
         Log.d("Adapter", "getItemViewType: " + dt);
-        Log.d("Adapter", "getItemViewType: " + pref.getString("date", ""));
-        // String checkDate=pref.getString("date","");
+        Log.d("Adapter", "getItemViewType: " + pref.getString("mDate", ""));
+        // String checkDate=pref.getString("mDate","");
 
         try {
             String checkDate = "";
             if (position != 0 && cd.getDate1().equalsIgnoreCase(callDetails.get(position - 1).getDate1())) {
                 checkDate = dt;
-                //pref.edit().putString("date",dt).apply();
-                Log.d("Adapter", "getItemViewType: in if condition" + pref.getString("date", ""));
+                //pref.edit().putString("mDate",dt).apply();
+                Log.d("Adapter", "getItemViewType: in if condition" + pref.getString("mDate", ""));
                 return 0;
                 /*if(name1!=null && !name1.equals(""))
                     return 0;
@@ -137,8 +138,8 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyViewHold
                     return 1;*/
             } else {
                 checkDate = dt;
-                //pref.edit().putString("date",dt).apply();
-                Log.d("Adapter", "getItemViewType: in else condition" + pref.getString("date", ""));
+                //pref.edit().putString("mDate",dt).apply();
+                Log.d("Adapter", "getItemViewType: in else condition" + pref.getString("mDate", ""));
                /* if(name1!=null && !name1.equals(""))
                     return 2;
                 else
@@ -157,15 +158,17 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyViewHold
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView number, time, date, name, avatar;
+        TextView mNumber, mTime, mDate, mName, mAvatar;
+        ImageView mCallType;
 
         MyViewHolder(View itemView) {
             super(itemView);
-            date = itemView.findViewById(R.id.item_list_date1);
-            name = itemView.findViewById(R.id.item_list_name1);
-            number = itemView.findViewById(R.id.item_list_num);
-            time = itemView.findViewById(R.id.item_list_time1);
-            avatar = itemView.findViewById(R.id.item_list_avatar);
+            mDate = itemView.findViewById(R.id.item_list_date1);
+            mName = itemView.findViewById(R.id.item_list_name1);
+            mNumber = itemView.findViewById(R.id.item_list_num);
+            mTime = itemView.findViewById(R.id.item_list_time1);
+            mAvatar = itemView.findViewById(R.id.item_list_avatar);
+            mCallType = itemView.findViewById(R.id.item_list_call_type);
         }
 
         void bind(final String dates, final String number, final String times) {
@@ -175,7 +178,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyViewHold
 
                     Toast.makeText(context, "Clicked on " + number, Toast.LENGTH_SHORT).show();
 
-                    String path = (Environment.getExternalStorageDirectory()+"") + Constants._file_location + dates + "/" + number + "_" + times + Constants._file_format;
+                    String path = (Environment.getExternalStorageDirectory() + "") + Constants._file_location + dates + "/" + number + "_" + times + Constants._file_format;
                     Log.d("path", "onClick: " + path);
                     //                    Uri uri = Uri.parse(path);
                     Intent intent = new Intent(Intent.ACTION_VIEW);
