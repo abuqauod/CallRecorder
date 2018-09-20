@@ -40,7 +40,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 
-        Boolean switchCheckOn = pref.getBoolean(Constants.SWITCH_ON, true);
+        Boolean switchCheckOn = pref.getBoolean("switchOn", true);
         if (switchCheckOn) {
             try {
                 System.out.println("Receiver Start");
@@ -59,7 +59,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
                 pref.edit().putInt("numOfCalls",++j).apply();
                 Log.d(TAG, "onReceive: num of calls "+ pref.getInt("numOfCalls",0));*/
                 } else if (Objects.equals(state, TelephonyManager.EXTRA_STATE_OFFHOOK)/*&& pref.getInt("numOfCalls",1)==1*/) {
-                    //outgoing call
+
                     int j = pref.getInt("numOfCalls", 0);
                     pref.edit().putInt("numOfCalls", ++j).apply();
                     Log.d(TAG, "onReceive: num of calls " + pref.getInt("numOfCalls", 0));
@@ -79,7 +79,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
                         //name=new CommonMethods().getContactName(phoneNumber,context);
 
                         int serialNumber = pref.getInt("serialNumData", 1);
-                        new DatabaseManager(context).addCallDetails(new CallDetails(serialNumber, phoneNumber, new CommonMethods().getTIme(), new CommonMethods().getDate().replace("\\", "_"),type));
+                        new DatabaseManager(context).addCallDetails(new CallDetails(serialNumber, phoneNumber, new CommonMethods().getTIme(), new CommonMethods().getDate()));
 
                         List<CallDetails> list = new DatabaseManager(context).getAllDetails();
                         for (CallDetails cd : list) {

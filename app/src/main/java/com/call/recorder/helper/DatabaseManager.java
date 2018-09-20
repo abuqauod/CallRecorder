@@ -32,7 +32,6 @@ public class DatabaseManager {
         // values.put(DatabaseHandler.CONTACT_NAME,callDetails.getName());
         values.put(DatabaseHandler.TIME, callDetails.getTime1());
         values.put(DatabaseHandler.DATE, callDetails.getDate1());
-        values.put(DatabaseHandler.CALL_TYPE, callDetails.getCallType());
 
         sqLiteDatabase.insert(DatabaseHandler.TABLE_RECORD, null, values);
     }
@@ -52,7 +51,6 @@ public class DatabaseManager {
                 // callDetails.setName(cursor.getString(2));
                 callDetails.setTime1(cursor.getString(2));
                 callDetails.setDate1(cursor.getString(3));
-                callDetails.setDate1(cursor.getString(4));
 
                 recordList.add(callDetails);
             } while (cursor.moveToNext());

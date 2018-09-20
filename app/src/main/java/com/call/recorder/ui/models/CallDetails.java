@@ -10,20 +10,19 @@ public class CallDetails implements Serializable {
 
     private int serial;
     private String num;
-    private String name;
+    //  private String name;
     private String time;
     private String date;
-    private String callType;
 
     public CallDetails() {
     }
 
-    public CallDetails(int serial, String num, String time, String date, String callType) {
+    public CallDetails(int serial, String num, String time, String date) {
         this.serial = serial;
         this.num = num;
+        //this.name=name;
         this.time = time;
         this.date = date;
-        this.callType = callType;
     }
 
     public int getSerial() {
@@ -42,13 +41,15 @@ public class CallDetails implements Serializable {
         this.num = num;
     }
 
-    public String getName() {
+   /* public String getName()
+    {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public void setName(String name)
+    {
+        this.name=name;
+    }*/
 
     public String getTime1() {
         return time;
@@ -64,13 +65,5 @@ public class CallDetails implements Serializable {
 
     public void setDate1(String date) {
         this.date = date;
-    }
-
-    public String getCallType() {
-        return callType;
-    }
-
-    public void setCallType(String callType) {
-        this.callType = callType;
     }
 }
