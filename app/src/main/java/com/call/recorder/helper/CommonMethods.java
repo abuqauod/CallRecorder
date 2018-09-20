@@ -30,7 +30,7 @@ public class CommonMethods {
         else if (amPm == 0)
             am_pm = "AM";
 
-        String time = String.valueOf(hr) + ":" + String.valueOf(min) + ":" + String.valueOf(sec) + " " + am_pm;
+        String time = String.valueOf(hr) + ":" + String.valueOf(min) + ":" + String.valueOf(sec) + "__" + am_pm;
 
         Log.d(TAGCM, "Date " + time);
         return time;
