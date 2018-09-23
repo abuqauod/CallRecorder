@@ -30,7 +30,7 @@ public class RecorderService extends Service {
 
         String time = new CommonMethods().getTIme();
 
-        String path = new CommonMethods().getPath();
+        String path = new CommonMethods().getPath(this);
 
         String rec = path + "/" + phoneNumber + "_" + time + Constants._file_format;
 
@@ -39,7 +39,6 @@ public class RecorderService extends Service {
         recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
 
         recorder.setOutputFile(rec);
-        Log.d(TAGS, "onStartCommand: " + path);
 
         try {
             recorder.prepare();

@@ -5,21 +5,18 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.RequiresApi;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.call.recorder.helper.CommonMethods;
 import com.call.recorder.helper.Constants;
-import com.call.recorder.helper.DatabaseManager;
+import com.call.recorder.helper.dataBase.DatabaseManager;
 import com.call.recorder.ui.models.CallDetails;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Created by VS00481543 on 25-10-2017.
@@ -32,10 +29,9 @@ public class PhoneStateReceiver extends BroadcastReceiver {
     public static String phoneNumber;
     public static String name;
     static Boolean recordStarted;
-    String type;
+    int callType = Constants.CAL_TYPE_MISSED_CALL;
 
     @SuppressLint("UnsafeProtectedBroadcastReceiver")
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onReceive(Context context, Intent intent) {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
@@ -47,19 +43,20 @@ public class PhoneStateReceiver extends BroadcastReceiver {
 
                 //            boolean callWait=pref.getBoolean("recordStarted",false);
                 Bundle extras = intent.getExtras();
-                String state = Objects.requireNonNull(extras).getString(TelephonyManager.EXTRA_STATE);
+                assert extras != null;
+                String state = extras.getString(TelephonyManager.EXTRA_STATE);
                 Log.d(TAG, " onReceive: " + state);
                 Toast.makeText(context, "Call detected(Incoming/Outgoing) " + state, Toast.LENGTH_SHORT).show();
 
-                if (Objects.equals(state, TelephonyManager.EXTRA_STATE_RINGING)) {
-                    //income call
-
+                assert state != null;
+                if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
                     Log.d(TAG1, " Inside " + state);
+                    callType = Constants.CAL_TYPE_INCOMING_CALL;
                 /*int j=pref.getInt("numOfCalls",0);
                 pref.edit().putInt("numOfCalls",++j).apply();
                 Log.d(TAG, "onReceive: num of calls "+ pref.getInt("numOfCalls",0));*/
-                } else if (Objects.equals(state, TelephonyManager.EXTRA_STATE_OFFHOOK)/*&& pref.getInt("numOfCalls",1)==1*/) {
-
+                } else if (state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)/*&& pref.getInt("numOfCalls",1)==1*/) {
+                    callType = Constants.CAL_TYPE_OUT_GOING_CALL;
                     int j = pref.getInt("numOfCalls", 0);
                     pref.edit().putInt("numOfCalls", ++j).apply();
                     Log.d(TAG, "onReceive: num of calls " + pref.getInt("numOfCalls", 0));
@@ -79,11 +76,19 @@ public class PhoneStateReceiver extends BroadcastReceiver {
                         //name=new CommonMethods().getContactName(phoneNumber,context);
 
                         int serialNumber = pref.getInt("serialNumData", 1);
-                        new DatabaseManager(context).addCallDetails(new CallDetails(serialNumber, phoneNumber, new CommonMethods().getTIme(), new CommonMethods().getDate()));
+
+                        CallDetails callDetails = new CallDetails();
+                        callDetails.setSerial(serialNumber);
+                        callDetails.setNum(phoneNumber);
+                        callDetails.setCallType(callType);
+                        callDetails.setTime(CommonMethods.formatTime(new CommonMethods().getTIme()));
+                        callDetails.setDate(new CommonMethods().getDate());
+
+                        new DatabaseManager(context).addCallDetails(callDetails);
 
                         List<CallDetails> list = new DatabaseManager(context).getAllDetails();
                         for (CallDetails cd : list) {
-                            String log = "Serial Number : " + cd.getSerial() + " | Phone num : " + cd.getNum() + " | Time : " + cd.getTime1() + " | Date : " + cd.getDate1();
+                            String log = "Serial Number : " + cd.getSerial() + " | Phone num : " + cd.getNum() + " | Time : " + cd.getTime() + " | Date : " + cd.getDate() + " | type : " + cd.getCallType();
                             Log.d("Database ", log);
                         }
 
@@ -93,7 +98,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
                         pref.edit().putBoolean("recordStarted", true).apply();
                     }
 
-                } else if (Objects.equals(state, TelephonyManager.EXTRA_STATE_IDLE)) {
+                } else if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
                     int k = pref.getInt("numOfCalls", 1);
                     pref.edit().putInt("numOfCalls", --k).apply();
                     int l = pref.getInt("numOfCalls", 0);

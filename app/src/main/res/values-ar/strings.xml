@@ -8,4 +8,9 @@
     <string name="phone_permissions_needed_for">أذونات الهاتف اللازمة ل</string>
     <string name="call_recording_on">تم تفعيل تسجيل المكالمات</string>
     <string name="unsaved">غير محفوظ</string>
+    <string name="select_one_of_the_option">اختر واحد من الخيارات</string>
+    <string name="view">عرض</string>
+    <string name="call">اتصل</string>
+    <string name="share">مشاركة</string>
+    <string name="delete">حذف</string>
 </resources>

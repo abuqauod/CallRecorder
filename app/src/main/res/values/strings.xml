@@ -8,4 +8,14 @@
     <string name="phone_permissions_needed_for">Phone Permissions needed for</string>
     <string name="call_recording_on">Recording calls: Active</string>
     <string name="unsaved">Unsaved</string>
+    <string name="select_one_of_the_option">Select one of the options</string>
+    <string name="view">VIEW</string>
+    <string name="call">CALL</string>
+    <string name="share">SHARE</string>
+    <string name="delete">DELETE</string>
+    <string name="mohammad_abuqauod">Mohammad AbuQauod</string>
+    <string name="ui_ux_designer_android_developer">UI/UX Designer | Android Developer</string>
+    <string name="follow_me">FOLLOW ME</string>
+    <string name="qauod_gmail_com">mqauod@gmail.com</string>
+    <string name="github_me">https://github.com/abuqauod/</string>
 </resources>

@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.call.recorder.R;
 import com.call.recorder.helper.CommonMethods;
 import com.call.recorder.helper.Constants;
+import com.call.recorder.ui.dialogs.DialogLongClick;
 import com.call.recorder.ui.models.CallDetails;
 
 import java.io.File;
@@ -33,12 +34,12 @@ import static android.support.v4.content.FileProvider.getUriForFile;
 public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyViewHolder> {
 
     private List<CallDetails> callDetails;
-    private Context context;
+    private Context mContext;
     private SharedPreferences pref;
 
     public RecordAdapter(List<CallDetails> callDetails, Context context) {
         this.callDetails = callDetails;
-        this.context = context;
+        this.mContext = context;
         pref = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
@@ -70,64 +71,68 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyViewHold
     @Override
     public void onBindViewHolder(@NonNull RecordAdapter.MyViewHolder holder, int position) {
 
-        CallDetails cd1 = callDetails.get(position);
-        String n = cd1.getNum();
-        String name = new CommonMethods().getContactName(n, context);
-        String name2 = context.getString(R.string.unsaved);
+        CallDetails mCallDetials = callDetails.get(position);
+        String n = mCallDetials.getNum();
+        String name = new CommonMethods().getContactName(n, mContext);
+        String name2 = mContext.getString(R.string.unsaved);
         Log.d("Names", "onBindViewHolder: " + name);
-        holder.bind(cd1.getDate1(), cd1.getNum(), cd1.getTime1());
+        holder.bind(mCallDetials);
+        holder.mSeparator.setVisibility(position == callDetails.size() - 1 ? View.GONE : View.VISIBLE);
+
         switch (getItemViewType(position)) {
             case 0:
                 if (name != null && !name.equals("")) {
                     holder.mName.setText(name);
-                    holder.mName.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
-                    holder.mAvatar.setBackground(ContextCompat.getDrawable(context, R.mipmap.man));
+                    holder.mName.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
+                    holder.mAvatar.setBackground(ContextCompat.getDrawable(mContext, R.mipmap.man));
                 } else {
                     holder.mName.setText(name2);
-                    holder.mName.setTextColor(context.getResources().getColor(R.color.red));
-                    holder.mAvatar.setBackground(ContextCompat.getDrawable(context, R.drawable.circle_grey));
+                    holder.mName.setTextColor(mContext.getResources().getColor(R.color.red));
+                    holder.mAvatar.setBackground(ContextCompat.getDrawable(mContext, R.drawable.circle_grey));
                     holder.mAvatar.setText(String.valueOf(name2.charAt(0)));
                 }
                 holder.mNumber.setText(callDetails.get(position).getNum());
-                holder.mTime.setText(callDetails.get(position).getTime1());
+                holder.mTime.setText(callDetails.get(position).getTime());
+                holder.mCallType.setImageResource(getImageType(mCallDetials));
                 break;
             /*case 1:
                 holder.mNumber.setText(callDetails.get(position).getNum());
-                holder.mTime.setText(callDetails.get(position).getTime1());
+                holder.mTime.setText(callDetails.get(position).getTime());
                 break;*/
             case 2:
-                holder.mDate.setText(callDetails.get(position).getDate1().replace("_", "/"));
+                holder.mDate.setText(callDetails.get(position).getDate().replace("_", "/"));
                 if (name != null && !name.equals("")) {
                     holder.mName.setText(name);
-                    holder.mName.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
-                    holder.mAvatar.setBackground(ContextCompat.getDrawable(context, R.mipmap.man));
+                    holder.mName.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
+                    holder.mAvatar.setBackground(ContextCompat.getDrawable(mContext, R.mipmap.man));
                 } else {
                     holder.mName.setText(name2);
-                    holder.mName.setTextColor(context.getResources().getColor(R.color.red));
-                    holder.mAvatar.setBackground(ContextCompat.getDrawable(context, R.drawable.circle_grey));
+                    holder.mName.setTextColor(mContext.getResources().getColor(R.color.red));
+                    holder.mAvatar.setBackground(ContextCompat.getDrawable(mContext, R.drawable.circle_grey));
                     holder.mAvatar.setText(String.valueOf(name2.charAt(0)));
                 }
                 holder.mNumber.setText(callDetails.get(position).getNum());
-                holder.mTime.setText(callDetails.get(position).getTime1());
+                holder.mTime.setText(callDetails.get(position).getTime());
+                holder.mCallType.setImageResource(getImageType(mCallDetials));
                 break;
             /*case 3:
-                holder.mDate.setText(callDetails.get(position).getDate1());
+                holder.mDate.setText(callDetails.get(position).getDate());
                 holder.mNumber.setText(callDetails.get(position).getNum());
-                holder.mTime.setText(callDetails.get(position).getTime1());
+                holder.mTime.setText(callDetails.get(position).getTime());
                 break;*/
         }
     }
 
     public int getItemViewType(int position) {
         CallDetails cd = callDetails.get(position);
-        String dt = cd.getDate1();
+        String dt = cd.getDate();
         Log.d("Adapter", "getItemViewType: " + dt);
         Log.d("Adapter", "getItemViewType: " + pref.getString("mDate", ""));
         // String checkDate=pref.getString("mDate","");
 
         try {
             String checkDate = "";
-            if (position != 0 && cd.getDate1().equalsIgnoreCase(callDetails.get(position - 1).getDate1())) {
+            if (position != 0 && cd.getDate().equalsIgnoreCase(callDetails.get(position - 1).getDate())) {
                 checkDate = dt;
                 //pref.edit().putString("mDate",dt).apply();
                 Log.d("Adapter", "getItemViewType: in if condition" + pref.getString("mDate", ""));
@@ -157,12 +162,27 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyViewHold
         return callDetails.size();
     }
 
+    private int getImageType(CallDetails mCallDetails) {
+        switch (mCallDetails.getCallType()) {
+            case Constants.CAL_TYPE_MISSED_CALL:
+                return R.drawable.ic_phone_missed_black_24dp;
+            case Constants.CAL_TYPE_OUT_GOING_CALL:
+                return R.drawable.ic_call_made_black_24dp;
+            case Constants.CAL_TYPE_INCOMING_CALL:
+                return R.drawable.ic_call_received_black_24dp;
+
+        }
+        return R.drawable.ic_phone_black_24dp;
+    }
+
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView mNumber, mTime, mDate, mName, mAvatar;
         ImageView mCallType;
+        View mSeparator;
 
         MyViewHolder(View itemView) {
             super(itemView);
+            mSeparator = itemView.findViewById(R.id.item_list_separator);
             mDate = itemView.findViewById(R.id.item_list_date1);
             mName = itemView.findViewById(R.id.item_list_name1);
             mNumber = itemView.findViewById(R.id.item_list_num);
@@ -171,22 +191,29 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyViewHold
             mCallType = itemView.findViewById(R.id.item_list_call_type);
         }
 
-        void bind(final String dates, final String number, final String times) {
+        void bind(final CallDetails mCallDetials) {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    Toast.makeText(context, "Clicked on " + number, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "Clicked on " + mCallDetials.getNum(), Toast.LENGTH_SHORT).show();
 
-                    String path = (Environment.getExternalStorageDirectory() + "") + Constants._file_location + dates + "/" + number + "_" + times + Constants._file_format;
+                    CallDetails callDetails = new CallDetails();
+                    callDetails.setSerial(pref.getInt("serialNumData", 1));
+                    callDetails.setNum(mCallDetials.getNum());
+                    callDetails.setCallType(mCallDetials.getCallType());
+                    callDetails.setTime(CommonMethods.formatTime(new CommonMethods().getTIme()));
+                    callDetails.setDate(new CommonMethods().getDate());
+
+                    String path = (Environment.getExternalStorageDirectory() + "") + Constants._file_location + mCallDetials.getDate() + "/" + mCallDetials.getNum() + "_" + mCallDetials.getTime() + Constants._file_format;
                     Log.d("path", "onClick: " + path);
                     //                    Uri uri = Uri.parse(path);
                     Intent intent = new Intent(Intent.ACTION_VIEW);
                     File file = new File(path);
                     //                    intent.setDataAndType(Uri.fromFile(file), "audio/*");
                     intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    intent.setDataAndType(getUriForFile(context, Constants.PACKAGE_NAME, file), "audio/*");
-                    context.startActivity(intent);
+                    intent.setDataAndType(getUriForFile(mContext, Constants.PACKAGE_NAME, file), "audio/*");
+                    mContext.startActivity(intent);
 
                     pref.edit().putBoolean("pauseStateVLC", true).apply();
 
@@ -207,6 +234,14 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyViewHold
                             mp.stop();
                         }
                     });*/
+                }
+            });
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    new DialogLongClick(mContext, mCallDetials).show();
+                    return false;
                 }
             });
         }

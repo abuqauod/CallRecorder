@@ -13,16 +13,14 @@ public class CallDetails implements Serializable {
     //  private String name;
     private String time;
     private String date;
+    private int  callType;////1: received call, 2 outgoing call 0 missed call
 
-    public CallDetails() {
+    public int getCallType() {
+        return callType;
     }
 
-    public CallDetails(int serial, String num, String time, String date) {
-        this.serial = serial;
-        this.num = num;
-        //this.name=name;
-        this.time = time;
-        this.date = date;
+    public void setCallType(int  callType) {
+        this.callType = callType;
     }
 
     public int getSerial() {
@@ -41,29 +39,21 @@ public class CallDetails implements Serializable {
         this.num = num;
     }
 
-   /* public String getName()
-    {
-        return name;
-    }
-
-    public void setName(String name)
-    {
-        this.name=name;
-    }*/
-
-    public String getTime1() {
+    public String getTime() {
         return time;
     }
 
-    public void setTime1(String time) {
+    public void setTime(String time) {
         this.time = time;
     }
 
-    public String getDate1() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate1(String date) {
+    public void setDate(String date) {
         this.date = date;
     }
+
+
 }

@@ -1,4 +1,4 @@
-package com.call.recorder.helper;
+package com.call.recorder.helper.dataBase;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.call.recorder.helper.CommonMethods;
 import com.call.recorder.ui.models.CallDetails;
 
 import java.util.ArrayList;
@@ -30,8 +31,11 @@ public class DatabaseManager {
         values.put(DatabaseHandler.SERIAL_NUMBER, callDetails.getSerial());
         values.put(DatabaseHandler.PHONE_NUMBER, callDetails.getNum());
         // values.put(DatabaseHandler.CONTACT_NAME,callDetails.getName());
-        values.put(DatabaseHandler.TIME, callDetails.getTime1());
-        values.put(DatabaseHandler.DATE, callDetails.getDate1());
+        values.put(DatabaseHandler.CALL_TYPE, callDetails.getCallType());
+
+        values.put(DatabaseHandler.TIME, callDetails.getTime());
+        values.put(DatabaseHandler.DATE, callDetails.getDate());
+
 
         sqLiteDatabase.insert(DatabaseHandler.TABLE_RECORD, null, values);
     }
@@ -48,9 +52,12 @@ public class DatabaseManager {
                 CallDetails callDetails = new CallDetails();
                 callDetails.setSerial(cursor.getInt(0));
                 callDetails.setNum(cursor.getString(1));
+                callDetails.setCallType(Integer.parseInt(cursor.getString(2)));
+
                 // callDetails.setName(cursor.getString(2));
-                callDetails.setTime1(cursor.getString(2));
-                callDetails.setDate1(cursor.getString(3));
+                callDetails.setTime(CommonMethods.formatTime(cursor.getString(3)));
+                callDetails.setDate(cursor.getString(4));
+
 
                 recordList.add(callDetails);
             } while (cursor.moveToNext());
@@ -58,5 +65,4 @@ public class DatabaseManager {
 
         return recordList;
     }
-
 }

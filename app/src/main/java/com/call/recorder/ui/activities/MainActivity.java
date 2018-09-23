@@ -1,6 +1,7 @@
 package com.call.recorder.ui.activities;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -23,9 +24,9 @@ import android.widget.Toast;
 
 import com.call.recorder.R;
 import com.call.recorder.helper.Constants;
-import com.call.recorder.helper.DatabaseHandler;
-import com.call.recorder.helper.DatabaseManager;
 import com.call.recorder.helper.TextView;
+import com.call.recorder.helper.dataBase.DatabaseHandler;
+import com.call.recorder.helper.dataBase.DatabaseManager;
 import com.call.recorder.ui.adapters.RecordAdapter;
 import com.call.recorder.ui.models.CallDetails;
 
@@ -143,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
         callDetailsList = new DatabaseManager(this).getAllDetails();
 
         for (CallDetails cd : callDetailsList) {
-            String log = "Phone num : " + cd.getNum() + " | Time : " + cd.getTime1() + " | Date : " + cd.getDate1();
+            String log = "Phone num : " + cd.getNum() + " | Time : " + cd.getTime() + " | Date : " + cd.getDate() + " | type : " + cd.getCallType();
             Log.d("Database ", log);
         }
 
@@ -208,6 +209,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         item.setActionView(mMenuView);
+
+
+        MenuItem item2 = menu.findItem(R.id.mySettings);
+        item2.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                return true;
+            }
+        });
         return true;
     }
 
