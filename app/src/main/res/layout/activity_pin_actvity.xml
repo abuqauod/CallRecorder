@@ -106,7 +106,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="9096"
+                    android:text="@string/_1782"
                     android:textColor="@color/colorPrimary"
                     android:textSize="20sp"
                     android:textStyle="bold"/>
@@ -116,7 +116,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:gravity="center"
-                    android:text="Followers"
+                    android:text="@string/followers"
                     android:textColor="#cc424242"/>
             </LinearLayout>
 
@@ -137,7 +137,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="2"
+                    android:text="@string/_1782"
                     android:textColor="@color/colorPrimary"
                     android:textSize="20sp"
                     android:textStyle="bold"/>
@@ -147,7 +147,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:gravity="center"
-                    android:text="Following"
+                    android:text="@string/following"
                     android:textColor="#cc424242"/>
             </LinearLayout>
 
@@ -168,7 +168,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="1782"
+                    android:text="@string/_1782"
                     android:textColor="@color/colorPrimary"
                     android:textSize="20sp"
                     android:textStyle="bold"/>
@@ -178,31 +178,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:gravity="center"
-                    android:text="Collections"
+                    android:text="@string/collections"
                     android:textColor="#cc424242"/>
             </LinearLayout>
         </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="26dp"
-            android:drawablePadding="24dp"
-            android:drawableStart="@drawable/ic_settings_black_24dp"
-            android:gravity="center"
-            android:text="@string/qauod_gmail_com"
-            android:textColor="@color/colorPrimary"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="26dp"
-            android:drawablePadding="24dp"
-            android:drawableStart="@drawable/ic_settings_black_24dp"
-            android:gravity="center"
-            android:text="@string/github_me"
-            android:textColor="@color/colorPrimary"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/profile_fragment_list_log"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 </RelativeLayout>

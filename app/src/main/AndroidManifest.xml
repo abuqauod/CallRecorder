@@ -18,7 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ui.activities.ProfileActivity">
+        <activity android:name=".ui.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -29,7 +29,7 @@
             android:name=".ui.activities.SettingsActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".ui.activities.MainActivity"
+            android:name=".ui.activities.ProfileActivity"
             android:screenOrientation="portrait"/>
 
         <receiver android:name=".ui.services.PhoneStateReceiver">

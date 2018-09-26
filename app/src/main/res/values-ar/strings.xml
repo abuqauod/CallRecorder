@@ -13,4 +13,8 @@
     <string name="call">اتصل</string>
     <string name="share">مشاركة</string>
     <string name="delete">حذف</string>
+    <string name="collections">Collections</string>
+    <string name="_1782">1782</string>
+    <string name="following">Following</string>
+    <string name="followers">Followers</string>
 </resources>

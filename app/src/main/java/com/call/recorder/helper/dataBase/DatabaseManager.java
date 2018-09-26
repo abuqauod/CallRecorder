@@ -65,4 +65,25 @@ public class DatabaseManager {
 
         return recordList;
     }
+
+    public List<CallDetails> getAllDetailsByPhoneNumber(String phoneNumber) {
+        List<CallDetails> recordList = new ArrayList<>();
+        String selectQuery = "SELECT * FROM " + DatabaseHandler.TABLE_RECORD + " WHERE phoneNumber='" + phoneNumber+"'";
+
+        @SuppressLint("Recycle") Cursor cursor = sqLiteDatabase.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                CallDetails callDetails = new CallDetails();
+                callDetails.setSerial(cursor.getInt(0));
+                callDetails.setNum(cursor.getString(1));
+                callDetails.setCallType(Integer.parseInt(cursor.getString(2)));
+                callDetails.setTime(CommonMethods.formatTime(cursor.getString(3)));
+                callDetails.setDate(cursor.getString(4));
+                recordList.add(callDetails);
+            } while (cursor.moveToNext());
+        }
+
+        return recordList;
+    }
 }

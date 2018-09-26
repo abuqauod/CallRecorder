@@ -3,7 +3,7 @@ package com.call.recorder.ui.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -14,27 +14,30 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.call.recorder.R;
 import com.call.recorder.helper.CommonMethods;
 import com.call.recorder.helper.Constants;
-import com.call.recorder.ui.activities.ProfileActivity;
 import com.call.recorder.ui.dialogs.DialogLongClick;
 import com.call.recorder.ui.models.CallDetails;
 
+import java.io.File;
 import java.util.List;
+
+import static android.support.v4.content.FileProvider.getUriForFile;
 
 /**
  * Created by VS00481543 on 03-11-2017.
  */
 
-public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyViewHolder> {
+public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyViewHolder> {
 
     private List<CallDetails> callDetails;
     private Context mContext;
     private SharedPreferences pref;
 
-    public RecordAdapter(List<CallDetails> callDetails, Context context) {
+    public ProfileAdapter(List<CallDetails> callDetails, Context context) {
         this.callDetails = callDetails;
         this.mContext = context;
         pref = PreferenceManager.getDefaultSharedPreferences(context);
@@ -42,7 +45,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyViewHold
 
     @NonNull
     @Override
-    public RecordAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ProfileAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         LayoutInflater mLayoutInflater = LayoutInflater.from(parent.getContext());
 
@@ -66,7 +69,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecordAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ProfileAdapter.MyViewHolder holder, int position) {
 
         CallDetails mCallDetials = callDetails.get(position);
         String n = mCallDetials.getNum();
@@ -193,51 +196,44 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyViewHold
                 @Override
                 public void onClick(View v) {
 
-                    Intent intent = new Intent(mContext, ProfileActivity.class);
-                    Bundle b = new Bundle();
-                    b.putString(Constants._mobile_number, mCallDetials.getNum()); //Your id
-                    intent.putExtras(b); //Put your id to your next Intent
+                    Toast.makeText(mContext, "Clicked on " + mCallDetials.getNum(), Toast.LENGTH_SHORT).show();
+
+                    CallDetails callDetails = new CallDetails();
+                    callDetails.setSerial(pref.getInt("serialNumData", 1));
+                    callDetails.setNum(mCallDetials.getNum());
+                    callDetails.setCallType(mCallDetials.getCallType());
+                    callDetails.setTime(CommonMethods.formatTime(new CommonMethods().getTIme()));
+                    callDetails.setDate(new CommonMethods().getDate());
+
+                    String path = (Environment.getExternalStorageDirectory() + "") + Constants._file_location + mCallDetials.getDate() + "/" + mCallDetials.getNum() + "_" + mCallDetials.getTime() + Constants._file_format;
+                    Log.d("path", "onClick: " + path);
+                    //                    Uri uri = Uri.parse(path);
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    File file = new File(path);
+                    //                    intent.setDataAndType(Uri.fromFile(file), "audio/*");
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    intent.setDataAndType(getUriForFile(mContext, Constants.PACKAGE_NAME, file), "audio/*");
                     mContext.startActivity(intent);
 
+                    pref.edit().putBoolean("pauseStateVLC", true).apply();
 
-                    // Toast.makeText(mContext, "Clicked on " + mCallDetials.getNum(), Toast.LENGTH_SHORT).show();
-
-                    // CallDetails callDetails = new CallDetails();
-                    // callDetails.setSerial(pref.getInt("serialNumData", 1));
-                    // callDetails.setNum(mCallDetials.getNum());
-                    // callDetails.setCallType(mCallDetials.getCallType());
-                    // callDetails.setTime(CommonMethods.formatTime(new CommonMethods().getTIme()));
-                    // callDetails.setDate(new CommonMethods().getDate());
-
-                    // String path = (Environment.getExternalStorageDirectory() + "") + Constants._file_location + mCallDetials.getDate() + "/" + mCallDetials.getNum() + "_" + mCallDetials.getTime() + Constants._file_format;
-                    // Log.d("path", "onClick: " + path);
-                    // //                    Uri uri = Uri.parse(path);
-                    // Intent intent = new Intent(Intent.ACTION_VIEW);
-                    // File file = new File(path);
-                    // //                    intent.setDataAndType(Uri.fromFile(file), "audio/*");
-                    // intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    // intent.setDataAndType(getUriForFile(mContext, Constants.PACKAGE_NAME, file), "audio/*");
-                    // mContext.startActivity(intent);
-
-                    // pref.edit().putBoolean("pauseStateVLC", true).apply();
-
-                    // /*FileInputStream fis=null;
-                    // MediaPlayer mp=new MediaPlayer();
-                    // try {
-                    //     fis=new FileInputStream(path);
-                    //     mp.setDataSource(fis.getFD());
-                    //     fis.close();
-                    //     mp.prepare();
-                    // } catch (IOException e) {
-                    //     e.printStackTrace();
-                    // }
-                    // mp.start();
-                    // mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                    //     @Override
-                    //     public void onCompletion(MediaPlayer mp) {
-                    //         mp.stop();
-                    //     }
-                    // });*/
+                    /*FileInputStream fis=null;
+                    MediaPlayer mp=new MediaPlayer();
+                    try {
+                        fis=new FileInputStream(path);
+                        mp.setDataSource(fis.getFD());
+                        fis.close();
+                        mp.prepare();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    mp.start();
+                    mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                        @Override
+                        public void onCompletion(MediaPlayer mp) {
+                            mp.stop();
+                        }
+                    });*/
                 }
             });
 
