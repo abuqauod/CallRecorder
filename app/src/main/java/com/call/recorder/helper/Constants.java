@@ -11,8 +11,12 @@ public class Constants {
     public static final String CONTACT_EMAIL = "mqauod@gmail.com";
 
     public static final int CAL_TYPE_MISSED_CALL = 0;
-    public static final int CAL_TYPE_OUT_GOING_CALL = 1;
-    public static final int CAL_TYPE_INCOMING_CALL = 2;
+    public static final int CAL_TYPE_OUT_GOING_CALL_START = 1;
+    public static final int CAL_TYPE_INCOMING_CALL_START = 2;
+
+    public static final int CAL_TYPE_OUT_GOING_CALL_END = 3;
+    public static final int CAL_TYPE_INCOMING_CALL_END = 4;
+
     public static final String SERIAL_NUM_DATA = "serialNumData";
 
     public static String FONT_REGULAR = "font.ttf";

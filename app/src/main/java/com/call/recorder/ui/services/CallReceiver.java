@@ -21,33 +21,27 @@ public class CallReceiver extends PhoneStateReceiver {
 
     @Override
     protected void onIncomingCallStarted(Context mContext, String number, Date start) {
-        Log.d("aaaaaaa", "onIncomingCallStarted: ");
-        //  insertToDB(mContext, number, start, Constants.CAL_TYPE_INCOMING_CALL);
+        insertToDB(mContext, number, start, Constants.CAL_TYPE_INCOMING_CALL_START);
     }
 
     @Override
     protected void onOutgoingCallStarted(Context mContext, String number, Date start) {
-        Log.d("aaaaaaa", "onOutgoingCallStarted: ");
-        // insertToDB(mContext, number, start, Constants.CAL_TYPE_OUT_GOING_CALL);
+        insertToDB(mContext, number, start, Constants.CAL_TYPE_OUT_GOING_CALL_START);
     }
 
     @Override
     protected void onMissedCall(Context mContext, String number, Date start) {
-        Log.d("aaaaaaa", "onMissedCall: ");
         insertToDB(mContext, number, start, Constants.CAL_TYPE_MISSED_CALL);
     }
 
-
     @Override
     protected void onIncomingCallEnded(Context mContext, String number, Date start, Date end) {
-        Log.d("aaaaaaa", "onIncomingCallEnded: ");
-        insertToDB(mContext, number, start, Constants.CAL_TYPE_INCOMING_CALL);
+        insertToDB(mContext, number, start, Constants.CAL_TYPE_INCOMING_CALL_END);
     }
 
     @Override
     protected void onOutgoingCallEnded(Context mContext, String number, Date start, Date end) {
-        Log.d("aaaaaaa", "onOutgoingCallEnded: ");
-        insertToDB(mContext, number, start, Constants.CAL_TYPE_OUT_GOING_CALL);
+        insertToDB(mContext, number, start, Constants.CAL_TYPE_OUT_GOING_CALL_END);
     }
 
     private void insertToDB(Context mContext, String number, Date start, int calType) {
@@ -62,10 +56,12 @@ public class CallReceiver extends PhoneStateReceiver {
         callDetails.setDate(new CommonMethods().getDate());
 
         new DatabaseManager(mContext).addCallDetails(callDetails);
+        pref.edit().putInt("serialNumData", ++serialNumber).apply();
+
         List<CallDetails> list = new DatabaseManager(mContext).getAllDetails();
         for (CallDetails cd : list) {
             String log = "Serial Number : " + cd.getSerial() + " | Phone num : " + cd.getNum() + " | Time : " + cd.getTime() + " | Date : " + cd.getDate() + " | type : " + cd.getCallType();
-            Log.d("Database ", log);
+            Log.d("Databasez ", log);
         }
     }
 }

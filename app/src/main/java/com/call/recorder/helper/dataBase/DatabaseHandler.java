@@ -19,7 +19,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     static final String CALL_TYPE = "callType";
 
     private static final String DATABASE_NAME = "callRecords";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
 
     public DatabaseHandler(Context context) {

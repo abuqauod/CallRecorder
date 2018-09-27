@@ -127,9 +127,9 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyViewHold
         switch (mCallDetails.getCallType()) {
             case Constants.CAL_TYPE_MISSED_CALL:
                 return R.drawable.ic_phone_missed_black_24dp;
-            case Constants.CAL_TYPE_OUT_GOING_CALL:
+            case Constants.CAL_TYPE_OUT_GOING_CALL_START:
                 return R.drawable.ic_call_made_black_24dp;
-            case Constants.CAL_TYPE_INCOMING_CALL:
+            case Constants.CAL_TYPE_INCOMING_CALL_START:
                 return R.drawable.ic_call_received_black_24dp;
 
         }
