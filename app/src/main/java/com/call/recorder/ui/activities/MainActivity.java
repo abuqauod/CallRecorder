@@ -24,7 +24,7 @@ import android.widget.Toast;
 
 import com.call.recorder.R;
 import com.call.recorder.helper.Constants;
-import com.call.recorder.helper.TextView;
+import com.call.recorder.helper.TextViewCustom;
 import com.call.recorder.helper.dataBase.DatabaseHandler;
 import com.call.recorder.helper.dataBase.DatabaseManager;
 import com.call.recorder.ui.adapters.RecordAdapter;
@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     RecordAdapter rAdapter;
     RecyclerView mRecycler;
     LinearLayout mLayout;
-    TextView mStartBtn;
+    TextViewCustom mStartBtn;
     List<CallDetails> callDetailsList;
     boolean checkResume = false;
     SharedPreferences mPreferences;

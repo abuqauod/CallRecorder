@@ -24,6 +24,8 @@ import com.call.recorder.ui.models.CallDetails;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 /**
  * Created by VS00481543 on 03-11-2017.
  */
@@ -68,29 +70,17 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyViewHold
     @Override
     public void onBindViewHolder(@NonNull RecordAdapter.MyViewHolder holder, int position) {
 
-        CallDetails mCallDetials = callDetails.get(position);
-        String n = mCallDetials.getNum();
+        CallDetails mCallDetails = callDetails.get(position);
+        String n = mCallDetails.getNum();
         String name = new CommonMethods().getContactName(n, mContext);
         String name2 = mContext.getString(R.string.unsaved);
         Log.d("Names", "onBindViewHolder: " + name);
-        holder.bind(mCallDetials);
+        holder.bind(mCallDetails);
         holder.mSeparator.setVisibility(position == callDetails.size() - 1 ? View.GONE : View.VISIBLE);
 
         switch (getItemViewType(position)) {
             case 0:
-                if (name != null && !name.equals("")) {
-                    holder.mName.setText(name);
-                    holder.mName.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
-                    holder.mAvatar.setBackground(ContextCompat.getDrawable(mContext, R.mipmap.man));
-                } else {
-                    holder.mName.setText(name2);
-                    holder.mName.setTextColor(mContext.getResources().getColor(R.color.red));
-                    holder.mAvatar.setBackground(ContextCompat.getDrawable(mContext, R.drawable.circle_grey));
-                    holder.mAvatar.setText(String.valueOf(name2.charAt(0)));
-                }
-                holder.mNumber.setText(callDetails.get(position).getNum());
-                holder.mTime.setText(callDetails.get(position).getTime());
-                holder.mCallType.setImageResource(getImageType(mCallDetials));
+                loadView(name, holder, name2, holder.getAdapterPosition(), mCallDetails, n);
                 break;
             /*case 1:
                 holder.mNumber.setText(callDetails.get(position).getNum());
@@ -98,19 +88,8 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyViewHold
                 break;*/
             case 2:
                 holder.mDate.setText(callDetails.get(position).getDate().replace("_", "/"));
-                if (name != null && !name.equals("")) {
-                    holder.mName.setText(name);
-                    holder.mName.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
-                    holder.mAvatar.setBackground(ContextCompat.getDrawable(mContext, R.mipmap.man));
-                } else {
-                    holder.mName.setText(name2);
-                    holder.mName.setTextColor(mContext.getResources().getColor(R.color.red));
-                    holder.mAvatar.setBackground(ContextCompat.getDrawable(mContext, R.drawable.circle_grey));
-                    holder.mAvatar.setText(String.valueOf(name2.charAt(0)));
-                }
-                holder.mNumber.setText(callDetails.get(position).getNum());
-                holder.mTime.setText(callDetails.get(position).getTime());
-                holder.mCallType.setImageResource(getImageType(mCallDetials));
+                loadView(name, holder, name2, holder.getAdapterPosition(), mCallDetails, n);
+
                 break;
             /*case 3:
                 holder.mDate.setText(callDetails.get(position).getDate());
@@ -118,6 +97,43 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyViewHold
                 holder.mTime.setText(callDetails.get(position).getTime());
                 break;*/
         }
+    }
+
+
+    private void loadView(String name, MyViewHolder holder, String name2, int adapterPosition, CallDetails mCallDetails, String number) {
+        if (name != null && !name.equals("")) {
+            holder.mName.setText(name);
+            holder.mName.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
+            //holder.mAvatar.setBackground(ContextCompat.getDrawable(mContext, R.mipmap.man));
+
+            holder.mAvatarImage.setVisibility(View.VISIBLE);
+            holder.mAvatar.setVisibility(View.GONE);
+
+            holder.mAvatarImage.setImageBitmap(CommonMethods.getContactPhoto(mContext, number));
+        } else {
+            holder.mName.setText(name2);
+            holder.mName.setTextColor(mContext.getResources().getColor(R.color.red));
+            holder.mAvatar.setBackground(ContextCompat.getDrawable(mContext, R.drawable.circle_grey));
+            holder.mAvatar.setText(String.valueOf(name2.charAt(0)));
+            holder.mAvatarImage.setVisibility(View.GONE);
+            holder.mAvatar.setVisibility(View.VISIBLE);
+        }
+        holder.mNumber.setText(callDetails.get(adapterPosition).getNum());
+        holder.mTime.setText(callDetails.get(adapterPosition).getTime());
+        holder.mCallType.setImageResource(getImageType(mCallDetails));
+    }
+
+    private int getImageType(CallDetails mCallDetails) {
+        switch (mCallDetails.getCallType()) {
+            case Constants.CAL_TYPE_MISSED_CALL:
+                return R.drawable.ic_phone_missed_black_24dp;
+            case Constants.CAL_TYPE_OUT_GOING_CALL:
+                return R.drawable.ic_call_made_black_24dp;
+            case Constants.CAL_TYPE_INCOMING_CALL:
+                return R.drawable.ic_call_received_black_24dp;
+
+        }
+        return R.drawable.ic_phone_black_24dp;
     }
 
     public int getItemViewType(int position) {
@@ -159,22 +175,10 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyViewHold
         return callDetails.size();
     }
 
-    private int getImageType(CallDetails mCallDetails) {
-        switch (mCallDetails.getCallType()) {
-            case Constants.CAL_TYPE_MISSED_CALL:
-                return R.drawable.ic_phone_missed_black_24dp;
-            case Constants.CAL_TYPE_OUT_GOING_CALL:
-                return R.drawable.ic_call_made_black_24dp;
-            case Constants.CAL_TYPE_INCOMING_CALL:
-                return R.drawable.ic_call_received_black_24dp;
-
-        }
-        return R.drawable.ic_phone_black_24dp;
-    }
-
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView mNumber, mTime, mDate, mName, mAvatar;
         ImageView mCallType;
+        CircleImageView mAvatarImage;
         View mSeparator;
 
         MyViewHolder(View itemView) {
@@ -185,6 +189,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyViewHold
             mNumber = itemView.findViewById(R.id.item_list_num);
             mTime = itemView.findViewById(R.id.item_list_time1);
             mAvatar = itemView.findViewById(R.id.item_list_avatar);
+            mAvatarImage = itemView.findViewById(R.id.item_list_avatar_image);
             mCallType = itemView.findViewById(R.id.item_list_call_type);
         }
 

@@ -8,21 +8,21 @@ import android.util.AttributeSet;
  * Created by Mohammad
  * on 9/18/2018 11:15 AM.
  */
-public class TextView extends android.support.v7.widget.AppCompatTextView {
+public class TextViewCustom extends android.support.v7.widget.AppCompatTextView {
 
-    public TextView(Context context, AttributeSet attrs, int defStyle) {
+    public TextViewCustom(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init();
     }
 
-    public TextView(Context context, AttributeSet attrs) {
+    public TextViewCustom(Context context, AttributeSet attrs) {
         super(context, attrs);
         if (!isInEditMode())
 
             init();
     }
 
-    public TextView(Context context) {
+    public TextViewCustom(Context context) {
         super(context);
         init();
     }

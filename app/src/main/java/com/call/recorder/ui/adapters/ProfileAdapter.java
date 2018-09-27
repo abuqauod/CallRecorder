@@ -13,17 +13,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.call.recorder.R;
 import com.call.recorder.helper.CommonMethods;
 import com.call.recorder.helper.Constants;
+import com.call.recorder.helper.TextViewCustom;
 import com.call.recorder.ui.dialogs.DialogLongClick;
 import com.call.recorder.ui.models.CallDetails;
 
 import java.io.File;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.support.v4.content.FileProvider.getUriForFile;
 
@@ -53,17 +55,9 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyViewHo
             case 0:
                 View v1 = mLayoutInflater.inflate(R.layout.item_list_record, parent, false);
                 return new MyViewHolder(v1);
-             /*case 1:
-                View v2 = mLayoutInflater.inflate(R.layout.record_noname_list, parent, false);
-                viewHolder = new MyViewHolder(v2);
-                break;*/
             case 2:
                 View v3 = mLayoutInflater.inflate(R.layout.date_layout, parent, false);
                 return new MyViewHolder(v3);
-             /*case 3:
-                View v4 = mLayoutInflater.inflate(R.layout.date_noname_layout, parent, false);
-                viewHolder = new MyViewHolder(v4);
-                break;*/
         }
         return null;
     }
@@ -71,55 +65,22 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyViewHo
     @Override
     public void onBindViewHolder(@NonNull ProfileAdapter.MyViewHolder holder, int position) {
 
-        CallDetails mCallDetials = callDetails.get(position);
-        String n = mCallDetials.getNum();
+        CallDetails mCallDetails = callDetails.get(position);
+        String n = mCallDetails.getNum();
         String name = new CommonMethods().getContactName(n, mContext);
         String name2 = mContext.getString(R.string.unsaved);
         Log.d("Names", "onBindViewHolder: " + name);
-        holder.bind(mCallDetials);
+        holder.bind(mCallDetails);
         holder.mSeparator.setVisibility(position == callDetails.size() - 1 ? View.GONE : View.VISIBLE);
 
         switch (getItemViewType(position)) {
             case 0:
-                if (name != null && !name.equals("")) {
-                    holder.mName.setText(name);
-                    holder.mName.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
-                    holder.mAvatar.setBackground(ContextCompat.getDrawable(mContext, R.mipmap.man));
-                } else {
-                    holder.mName.setText(name2);
-                    holder.mName.setTextColor(mContext.getResources().getColor(R.color.red));
-                    holder.mAvatar.setBackground(ContextCompat.getDrawable(mContext, R.drawable.circle_grey));
-                    holder.mAvatar.setText(String.valueOf(name2.charAt(0)));
-                }
-                holder.mNumber.setText(callDetails.get(position).getNum());
-                holder.mTime.setText(callDetails.get(position).getTime());
-                holder.mCallType.setImageResource(getImageType(mCallDetials));
+                loadView(name, holder, name2, holder.getAdapterPosition(), mCallDetails, n);
                 break;
-            /*case 1:
-                holder.mNumber.setText(callDetails.get(position).getNum());
-                holder.mTime.setText(callDetails.get(position).getTime());
-                break;*/
             case 2:
                 holder.mDate.setText(callDetails.get(position).getDate().replace("_", "/"));
-                if (name != null && !name.equals("")) {
-                    holder.mName.setText(name);
-                    holder.mName.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
-                    holder.mAvatar.setBackground(ContextCompat.getDrawable(mContext, R.mipmap.man));
-                } else {
-                    holder.mName.setText(name2);
-                    holder.mName.setTextColor(mContext.getResources().getColor(R.color.red));
-                    holder.mAvatar.setBackground(ContextCompat.getDrawable(mContext, R.drawable.circle_grey));
-                    holder.mAvatar.setText(String.valueOf(name2.charAt(0)));
-                }
-                holder.mNumber.setText(callDetails.get(position).getNum());
-                holder.mTime.setText(callDetails.get(position).getTime());
-                holder.mCallType.setImageResource(getImageType(mCallDetials));
+                loadView(name, holder, name2, holder.getAdapterPosition(), mCallDetails, n);
                 break;
-            /*case 3:
-                holder.mDate.setText(callDetails.get(position).getDate());
-                holder.mNumber.setText(callDetails.get(position).getNum());
-                holder.mTime.setText(callDetails.get(position).getTime());
-                break;*/
         }
     }
 
@@ -162,6 +123,29 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyViewHo
         return callDetails.size();
     }
 
+    private void loadView(String name, MyViewHolder holder, String name2, int adapterPosition, CallDetails mCallDetails, String number) {
+        if (name != null && !name.equals("")) {
+            holder.mName.setText(name);
+            holder.mName.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
+            //holder.mAvatar.setBackground(ContextCompat.getDrawable(mContext, R.mipmap.man));
+
+            holder.mAvatarImage.setVisibility(View.VISIBLE);
+            holder.mAvatar.setVisibility(View.GONE);
+
+            holder.mAvatarImage.setImageBitmap(CommonMethods.getContactPhoto(mContext, number));
+        } else {
+            holder.mName.setText(name2);
+            holder.mName.setTextColor(mContext.getResources().getColor(R.color.red));
+            holder.mAvatar.setBackground(ContextCompat.getDrawable(mContext, R.drawable.circle_grey));
+            holder.mAvatar.setText(String.valueOf(name2.charAt(0)));
+            holder.mAvatarImage.setVisibility(View.GONE);
+            holder.mAvatar.setVisibility(View.VISIBLE);
+        }
+        holder.mNumber.setText(callDetails.get(adapterPosition).getNum());
+        holder.mTime.setText(callDetails.get(adapterPosition).getTime());
+        holder.mCallType.setImageResource(getImageType(mCallDetails));
+    }
+
     private int getImageType(CallDetails mCallDetails) {
         switch (mCallDetails.getCallType()) {
             case Constants.CAL_TYPE_MISSED_CALL:
@@ -176,8 +160,9 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyViewHo
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView mNumber, mTime, mDate, mName, mAvatar;
+        TextViewCustom mNumber, mTime, mDate, mName, mAvatar;
         ImageView mCallType;
+        CircleImageView mAvatarImage;
         View mSeparator;
 
         MyViewHolder(View itemView) {
@@ -188,6 +173,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyViewHo
             mNumber = itemView.findViewById(R.id.item_list_num);
             mTime = itemView.findViewById(R.id.item_list_time1);
             mAvatar = itemView.findViewById(R.id.item_list_avatar);
+            mAvatarImage = itemView.findViewById(R.id.item_list_avatar_image);
             mCallType = itemView.findViewById(R.id.item_list_call_type);
         }
 

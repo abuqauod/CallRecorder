@@ -68,7 +68,7 @@ public class DatabaseManager {
 
     public List<CallDetails> getAllDetailsByPhoneNumber(String phoneNumber) {
         List<CallDetails> recordList = new ArrayList<>();
-        String selectQuery = "SELECT * FROM " + DatabaseHandler.TABLE_RECORD + " WHERE phoneNumber='" + phoneNumber+"'";
+        String selectQuery = "SELECT * FROM " + DatabaseHandler.TABLE_RECORD + " WHERE phoneNumber='" + phoneNumber + "'";
 
         @SuppressLint("Recycle") Cursor cursor = sqLiteDatabase.rawQuery(selectQuery, null);
 

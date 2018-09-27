@@ -1,14 +1,21 @@
 package com.call.recorder.helper;
 
 import android.app.Service;
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.ContactsContract;
 import android.util.Log;
 
+import com.call.recorder.R;
+
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,8 +29,45 @@ import java.util.Locale;
 
 public class CommonMethods {
 
-    final String TAGCM = "Inside Service";
-    Calendar cal = Calendar.getInstance();
+    private final String TAG = "Inside Service";
+    private Calendar cal = Calendar.getInstance();
+
+    public static Bitmap getContactPhoto(Context context, String number) {
+        ContentResolver contentResolver = context.getContentResolver();
+        String contactId = null;
+        Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
+
+        String[] projection = new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME, ContactsContract.PhoneLookup._ID};
+
+        Cursor cursor = contentResolver.query(uri, projection, null, null, null);
+
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                contactId = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.PhoneLookup._ID));
+            }
+            cursor.close();
+        }
+
+        Bitmap photo = BitmapFactory.decodeResource(context.getResources(), R.mipmap.man);
+
+        Uri contactUri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, Long.parseLong(contactId));
+        Uri photoUri = Uri.withAppendedPath(contactUri, ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
+        cursor = context.getContentResolver().query(photoUri, new String[]{ContactsContract.Contacts.Photo.PHOTO}, null, null, null);
+        if (cursor == null) {
+            return null;
+        }
+        try {
+            if (cursor.moveToFirst()) {
+                byte[] data = cursor.getBlob(0);
+                if (data != null) {
+                    return BitmapFactory.decodeStream(new ByteArrayInputStream(data));
+                }
+            }
+        } finally {
+            cursor.close();
+        }
+        return photo;
+    }
 
     public String getTIme() {
         String am_pm = "";
@@ -38,7 +82,7 @@ public class CommonMethods {
 
         String time = String.valueOf(hr) + ":" + String.valueOf(min) + ":" + String.valueOf(sec) + " " + am_pm;
 
-        Log.d(TAGCM, "Date " + CommonMethods.formatTime(time));
+        Log.d(TAG, "Date " + CommonMethods.formatTime(time));
         return CommonMethods.formatTime(time);
     }
 
@@ -68,7 +112,7 @@ public class CommonMethods {
 
 
         String path = file1.getAbsolutePath();
-        Log.d(TAGCM, "Path " + path);
+        Log.d(TAG, "Path " + path);
 
         return path;
     }
@@ -79,7 +123,7 @@ public class CommonMethods {
         int day = cal.get(Calendar.DATE);
         String date = String.valueOf(day) + "_" + String.valueOf(month) + "_" + String.valueOf(year);
 
-        Log.d(TAGCM, "Date " + date);
+        Log.d(TAG, "Date " + date);
         return date;
     }
 
@@ -105,4 +149,5 @@ public class CommonMethods {
         else
             return "";
     }
+
 }
