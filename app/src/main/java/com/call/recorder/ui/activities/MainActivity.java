@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         pref.edit().putInt("numOfCalls", 0).apply();
 
-        // pref.edit().putInt("serialNumData", 1).apply();
+        // pref.edit().putInt(Constants.SERIAL_NUM_DATA, 1).apply();
 
         //rAdapter.notifyDataSetChanged();
     }

@@ -208,7 +208,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyViewHold
                     // Toast.makeText(mContext, "Clicked on " + mCallDetials.getNum(), Toast.LENGTH_SHORT).show();
 
                     // CallDetails callDetails = new CallDetails();
-                    // callDetails.setSerial(pref.getInt("serialNumData", 1));
+                    // callDetails.setSerial(pref.getInt(Constants.SERIAL_NUM_DATA, 1));
                     // callDetails.setNum(mCallDetials.getNum());
                     // callDetails.setCallType(mCallDetials.getCallType());
                     // callDetails.setTime(CommonMethods.formatTime(new CommonMethods().getTIme()));

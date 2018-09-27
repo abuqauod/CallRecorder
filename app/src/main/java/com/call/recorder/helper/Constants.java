@@ -13,6 +13,7 @@ public class Constants {
     public static final int CAL_TYPE_MISSED_CALL = 0;
     public static final int CAL_TYPE_OUT_GOING_CALL = 1;
     public static final int CAL_TYPE_INCOMING_CALL = 2;
+    public static final String SERIAL_NUM_DATA = "serialNumData";
 
     public static String FONT_REGULAR = "font.ttf";
     public static String _file_format = ".mp3";

@@ -98,7 +98,7 @@
         android:layout_below="@+id/cont"
         android:layout_marginStart="24dp"
         android:layout_marginTop="10dp"
-        android:layout_toEndOf="@id/item_list_avatar"
+        android:layout_toEndOf="@id/item_list_avatar_lin"
         android:background="@color/grey"
         android:paddingStart="40dp"
         android:paddingEnd="0dp"/>

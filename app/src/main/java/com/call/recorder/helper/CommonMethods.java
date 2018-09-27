@@ -33,38 +33,44 @@ public class CommonMethods {
     private Calendar cal = Calendar.getInstance();
 
     public static Bitmap getContactPhoto(Context context, String number) {
-        ContentResolver contentResolver = context.getContentResolver();
-        String contactId = null;
-        Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
-
-        String[] projection = new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME, ContactsContract.PhoneLookup._ID};
-
-        Cursor cursor = contentResolver.query(uri, projection, null, null, null);
-
-        if (cursor != null) {
-            while (cursor.moveToNext()) {
-                contactId = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.PhoneLookup._ID));
-            }
-            cursor.close();
-        }
-
+        Cursor cursor = null;
         Bitmap photo = BitmapFactory.decodeResource(context.getResources(), R.mipmap.man);
-
-        Uri contactUri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, Long.parseLong(contactId));
-        Uri photoUri = Uri.withAppendedPath(contactUri, ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
-        cursor = context.getContentResolver().query(photoUri, new String[]{ContactsContract.Contacts.Photo.PHOTO}, null, null, null);
-        if (cursor == null) {
-            return null;
-        }
         try {
+            ContentResolver contentResolver = context.getContentResolver();
+            String contactId = null;
+            Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
+
+            String[] projection = new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME, ContactsContract.PhoneLookup._ID};
+
+            cursor = contentResolver.query(uri, projection, null, null, null);
+
+            if (cursor != null) {
+                while (cursor.moveToNext()) {
+                    contactId = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.PhoneLookup._ID));
+                }
+                cursor.close();
+            }
+
+
+            Uri contactUri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, Long.parseLong(contactId));
+            Uri photoUri = Uri.withAppendedPath(contactUri, ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
+            cursor = context.getContentResolver().query(photoUri, new String[]{ContactsContract.Contacts.Photo.PHOTO}, null, null, null);
+            if (cursor == null) {
+                return null;
+            }
+
             if (cursor.moveToFirst()) {
                 byte[] data = cursor.getBlob(0);
                 if (data != null) {
                     return BitmapFactory.decodeStream(new ByteArrayInputStream(data));
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
-            cursor.close();
+            if (cursor != null) {
+                cursor.close();
+            }
         }
         return photo;
     }
