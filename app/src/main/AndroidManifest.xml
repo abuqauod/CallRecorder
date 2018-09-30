@@ -27,7 +27,7 @@
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="@string/interstitial_ad_app_id"/>
+            android:value="@string/ad_app_id"/>
 
         <activity android:name=".ui.activities.MainActivity">
             <intent-filter>

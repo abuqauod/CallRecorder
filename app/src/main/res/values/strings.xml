@@ -22,6 +22,7 @@
     <string name="_1782">1782</string>
     <string name="following">Following</string>
     <string name="followers">Followers</string>
-    <string name="interstitial_ad_app_id" translatable="false">ca-app-pub-3256827296248214~2373075491</string>
-    <string name="interstitial_ad_unit_id" translatable="false">ca-app-pub-3256827296248214/4665316470</string>
+    <string name="ad_app_id" translatable="false">ca-app-pub-3256827296248214~2373075491</string>
+    <string name="ads_unit_id_interstitial" translatable="false">ca-app-pub-3256827296248214/4665316470</string>
+    <string name="ads_unit_id_banner" translatable="false">ca-app-pub-3256827296248214/7999439716</string>
 </resources>

@@ -29,6 +29,7 @@ import com.call.recorder.helper.dataBase.DatabaseHandler;
 import com.call.recorder.helper.dataBase.DatabaseManager;
 import com.call.recorder.ui.adapters.RecordAdapter;
 import com.call.recorder.ui.models.CallDetails;
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
@@ -77,8 +78,9 @@ public class MainActivity extends AppCompatActivity {
         // pref.edit().putInt(Constants.SERIAL_NUM_DATA, 1).apply();
 
         //rAdapter.notifyDataSetChanged();
-        initAdsMob();
+        showInterstitial();
     }
+
 
     private void initControls() {
         mRecycler = findViewById(R.id.main_activity_recycler);
@@ -96,45 +98,43 @@ public class MainActivity extends AppCompatActivity {
         startRecording(mPreferences.getBoolean(Constants.SWITCH_ON, true));
     }
 
-    private void initAdsMob() {
-        MobileAds.initialize(this, getResources().getString(R.string.interstitial_ad_app_id));
+    private void showInterstitial() {
+        MobileAds.initialize(this);
 
         AdView mAdView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+        mAdView.loadAd(new AdRequest.Builder().build());
 
-//        mInterstitialAd = new InterstitialAd(this);
-//        mInterstitialAd.setAdUnitId(getResources().getString(R.string.interstitial_ad_unit_id));
-//        mInterstitialAd.loadAd(new AdRequest.Builder().build());
-//
-//        mInterstitialAd.setAdListener(new AdListener() {
-//            @Override
-//            public void onAdClosed() {
-//                // Load the next interstitial.
-//                mInterstitialAd.loadAd(new AdRequest.Builder().build());
-//            }
-//
-//            @Override
-//            public void onAdFailedToLoad(int errorCode) {
-//                // initAdsMob();
-//            }
-//
-//            @Override
-//            public void onAdLeftApplication() {
-//                // Code to be executed when the user has left the app.
-//            }
-//
-//            @Override
-//            public void onAdOpened() {
-//                // Code to be executed when the ad is displayed.
-//            }
-//
-//            @Override
-//            public void onAdLoaded() {
-//                mInterstitialAd.show();
-//            }
-//        });
-        new AdRequest.Builder().addTestDevice("DCB12029AC0105594F4CA445496C763D");
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId(getResources().getString(R.string.ads_unit_id_interstitial));
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                // Load the next interstitial.
+                mInterstitialAd.loadAd(new AdRequest.Builder().build());
+            }
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                // initAdsMob();
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                // Code to be executed when the user has left the app.
+            }
+
+            @Override
+            public void onAdOpened() {
+                // Code to be executed when the ad is displayed.
+            }
+
+            @Override
+            public void onAdLoaded() {
+                mInterstitialAd.show();
+            }
+        });
     }
 
     public void startRecording(boolean isTurnItOn) {
@@ -154,10 +154,11 @@ public class MainActivity extends AppCompatActivity {
             checkResume = false;
     }
 
+
     @Override
     protected void onResume() {
         super.onResume();
-        Log.e("Check", "onResume: ");
+
         if (checkPermission()) {
             //Toast.makeText(getApplicationContext(), "Permission already granted", Toast.LENGTH_LONG).show();
             if (!checkResume) {
