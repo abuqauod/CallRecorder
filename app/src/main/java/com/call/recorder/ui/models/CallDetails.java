@@ -10,16 +10,24 @@ public class CallDetails implements Serializable {
 
     private int serial;
     private String num;
-    //  private String name;
     private String time;
     private String date;
-    private int  callType;////1: received call, 2 outgoing call 0 missed call
+    private int callType;////1: received call, 2 outgoing call 0 missed call
+    private long duration;
+
+    public long getDuration() {
+        return duration;
+    }
+
+    public void setDuration(long duration) {
+        this.duration = duration;
+    }
 
     public int getCallType() {
         return callType;
     }
 
-    public void setCallType(int  callType) {
+    public void setCallType(int callType) {
         this.callType = callType;
     }
 

@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.telephony.TelephonyManager;
+import android.widget.Toast;
 
 import java.util.Date;
 
@@ -13,37 +14,36 @@ import java.util.Date;
 
 public class PhoneStateReceiver extends BroadcastReceiver {
 
-    //The receiver will be recreated whenever android feels like it.  We need a static variable to remember data between instantiations
-
     private static int lastState = TelephonyManager.CALL_STATE_IDLE;
     private static Date callStartTime;
     private static boolean isIncoming;
-    private static String savedNumber;  //because the passed incoming is only valid in ringing
-    String mNumber;
+    private static String savedNumber;
+
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        //Log.w("intent " , intent.getAction().toString());
 
-        //We listen to two intents.  The new outgoing call only tells us of an outgoing call.  We use it to get the number.
         if (intent.getAction().equals("android.intent.action.NEW_OUTGOING_CALL")) {
             savedNumber = intent.getExtras().getString("android.intent.extra.PHONE_NUMBER");
+
         } else {
             String stateStr = intent.getExtras().getString(TelephonyManager.EXTRA_STATE);
-            mNumber = intent.getExtras().getString(TelephonyManager.EXTRA_INCOMING_NUMBER);
-
+            String number = intent.getExtras().getString(TelephonyManager.EXTRA_INCOMING_NUMBER);
             int state = TelephonyManager.CALL_STATE_IDLE;
+            this.setResultData(number);
+
             if (stateStr.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)) {
                 state = TelephonyManager.CALL_STATE_OFFHOOK;
             } else if (stateStr.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
                 state = TelephonyManager.CALL_STATE_RINGING;
             }
 
-            onCallStateChanged(context, state, mNumber);
+            onCallStateChanged(context, state, number);
         }
     }
 
-    //Incoming call-  goes from IDLE to RINGING when it rings, to OFFHOOK when it's answered, to IDLE when its hung up
-    //Outgoing call-  goes from IDLE to OFFHOOK when it dials out, to IDLE when hung up
+
     public void onCallStateChanged(Context context, int state, String number) {
         if (lastState == state) {
             //No change, debounce extras
@@ -55,26 +55,33 @@ public class PhoneStateReceiver extends BroadcastReceiver {
                 callStartTime = new Date();
                 savedNumber = number;
                 onIncomingCallStarted(context, number, callStartTime);
+
+                Toast.makeText(context, "Incoming Call Ringing", Toast.LENGTH_LONG).show();
                 break;
             case TelephonyManager.CALL_STATE_OFFHOOK:
-                //Transition of ringing->offhook are pickups of incoming calls.  Nothing done on them
+                //Transition of ringing -> off-hook are pickups of incoming calls.  Nothing done on them
                 if (lastState != TelephonyManager.CALL_STATE_RINGING) {
                     isIncoming = false;
                     callStartTime = new Date();
+                    Toast.makeText(context, "Outgoing Call Started", Toast.LENGTH_LONG).show();
                     onOutgoingCallStarted(context, savedNumber, callStartTime);
                 }
+
                 break;
             case TelephonyManager.CALL_STATE_IDLE:
-                savedNumber = savedNumber != null ? savedNumber : mNumber;
                 //Went to idle-  this is the end of a call.  What type depends on previous state(s)
                 if (lastState == TelephonyManager.CALL_STATE_RINGING) {
                     //Ring but no pickup-  a miss
+                    Toast.makeText(context, "Ringing but no pickup" + savedNumber + " Call time " + callStartTime + " Date " + new Date(), Toast.LENGTH_LONG).show();
                     onMissedCall(context, savedNumber, callStartTime);
                 } else if (isIncoming) {
                     onIncomingCallEnded(context, savedNumber, callStartTime, new Date());
+                    Toast.makeText(context, "Incoming " + savedNumber + " Call time " + callStartTime, Toast.LENGTH_LONG).show();
                 } else {
-                    onOutgoingCallEnded(context, savedNumber, callStartTime, new Date());
+                    onOutgoingCallEnded(context, savedNumber == null ? getResultData() : savedNumber, callStartTime, new Date());
+                    Toast.makeText(context, "outgoing " + savedNumber + " ||||||| " + getResultData() + " Call time " + callStartTime + " Date " + new Date(), Toast.LENGTH_LONG).show();
                 }
+
                 break;
         }
         lastState = state;
@@ -92,8 +99,6 @@ public class PhoneStateReceiver extends BroadcastReceiver {
 
     protected void onIncomingCallEnded(Context ctx, String number, Date start, Date end) {
     }
-
-    //Deals with actual events
 
     protected void onOutgoingCallEnded(Context ctx, String number, Date start, Date end) {
     }

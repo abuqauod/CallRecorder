@@ -29,6 +29,10 @@ import com.call.recorder.helper.dataBase.DatabaseHandler;
 import com.call.recorder.helper.dataBase.DatabaseManager;
 import com.call.recorder.ui.adapters.RecordAdapter;
 import com.call.recorder.ui.models.CallDetails;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -47,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences mPreferences;
     SwitchCompat mSwitchCompat;
     View mMenuView;
+    private InterstitialAd mInterstitialAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
         // pref.edit().putInt(Constants.SERIAL_NUM_DATA, 1).apply();
 
         //rAdapter.notifyDataSetChanged();
+        initAdsMob();
     }
 
     private void initControls() {
@@ -88,6 +94,47 @@ public class MainActivity extends AppCompatActivity {
         mMenuView = getLayoutInflater().inflate(R.layout.switch_layout, null, false);
         mSwitchCompat = mMenuView.findViewById(R.id.switchCheck);
         startRecording(mPreferences.getBoolean(Constants.SWITCH_ON, true));
+    }
+
+    private void initAdsMob() {
+        MobileAds.initialize(this, getResources().getString(R.string.interstitial_ad_app_id));
+
+        AdView mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
+//        mInterstitialAd = new InterstitialAd(this);
+//        mInterstitialAd.setAdUnitId(getResources().getString(R.string.interstitial_ad_unit_id));
+//        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+//
+//        mInterstitialAd.setAdListener(new AdListener() {
+//            @Override
+//            public void onAdClosed() {
+//                // Load the next interstitial.
+//                mInterstitialAd.loadAd(new AdRequest.Builder().build());
+//            }
+//
+//            @Override
+//            public void onAdFailedToLoad(int errorCode) {
+//                // initAdsMob();
+//            }
+//
+//            @Override
+//            public void onAdLeftApplication() {
+//                // Code to be executed when the user has left the app.
+//            }
+//
+//            @Override
+//            public void onAdOpened() {
+//                // Code to be executed when the ad is displayed.
+//            }
+//
+//            @Override
+//            public void onAdLoaded() {
+//                mInterstitialAd.show();
+//            }
+//        });
+        new AdRequest.Builder().addTestDevice("DCB12029AC0105594F4CA445496C763D");
     }
 
     public void startRecording(boolean isTurnItOn) {

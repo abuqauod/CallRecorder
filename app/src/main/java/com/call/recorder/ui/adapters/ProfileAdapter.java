@@ -25,8 +25,6 @@ import com.call.recorder.ui.models.CallDetails;
 import java.io.File;
 import java.util.List;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
 import static android.support.v4.content.FileProvider.getUriForFile;
 
 /**
@@ -89,27 +87,13 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyViewHo
         String dt = cd.getDate();
         Log.d("Adapter", "getItemViewType: " + dt);
         Log.d("Adapter", "getItemViewType: " + pref.getString("mDate", ""));
-        // String checkDate=pref.getString("mDate","");
 
         try {
-            String checkDate = "";
             if (position != 0 && cd.getDate().equalsIgnoreCase(callDetails.get(position - 1).getDate())) {
-                checkDate = dt;
-                //pref.edit().putString("mDate",dt).apply();
                 Log.d("Adapter", "getItemViewType: in if condition" + pref.getString("mDate", ""));
                 return 0;
-                /*if(name1!=null && !name1.equals(""))
-                    return 0;
-                else
-                    return 1;*/
             } else {
-                checkDate = dt;
-                //pref.edit().putString("mDate",dt).apply();
                 Log.d("Adapter", "getItemViewType: in else condition" + pref.getString("mDate", ""));
-               /* if(name1!=null && !name1.equals(""))
-                    return 2;
-                else
-                    return 3;*/
                 return 2;
             }
         } catch (Exception e) {
@@ -127,18 +111,14 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyViewHo
         if (name != null && !name.equals("")) {
             holder.mName.setText(name);
             holder.mName.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
-            //holder.mAvatar.setBackground(ContextCompat.getDrawable(mContext, R.mipmap.man));
-
-            holder.mAvatarImage.setVisibility(View.VISIBLE);
+            holder.mAvatar.setBackground(ContextCompat.getDrawable(mContext, R.mipmap.man));
             holder.mAvatar.setVisibility(View.GONE);
 
-            holder.mAvatarImage.setImageBitmap(CommonMethods.getContactPhoto(mContext, number));
-        } else {
+         } else {
             holder.mName.setText(name2);
             holder.mName.setTextColor(mContext.getResources().getColor(R.color.red));
             holder.mAvatar.setBackground(ContextCompat.getDrawable(mContext, R.drawable.circle_grey));
             holder.mAvatar.setText(String.valueOf(name2.charAt(0)));
-            holder.mAvatarImage.setVisibility(View.GONE);
             holder.mAvatar.setVisibility(View.VISIBLE);
         }
         holder.mNumber.setText(callDetails.get(adapterPosition).getNum());
@@ -151,8 +131,10 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyViewHo
             case Constants.CAL_TYPE_MISSED_CALL:
                 return R.drawable.ic_phone_missed_black_24dp;
             case Constants.CAL_TYPE_OUT_GOING_CALL_START:
+            case Constants.CAL_TYPE_OUT_GOING_CALL_END:
                 return R.drawable.ic_call_made_black_24dp;
             case Constants.CAL_TYPE_INCOMING_CALL_START:
+            case Constants.CAL_TYPE_INCOMING_CALL_END:
                 return R.drawable.ic_call_received_black_24dp;
 
         }
@@ -162,8 +144,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyViewHo
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextViewCustom mNumber, mTime, mDate, mName, mAvatar;
         ImageView mCallType;
-        CircleImageView mAvatarImage;
-        View mSeparator;
+         View mSeparator;
 
         MyViewHolder(View itemView) {
             super(itemView);
@@ -173,8 +154,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyViewHo
             mNumber = itemView.findViewById(R.id.item_list_num);
             mTime = itemView.findViewById(R.id.item_list_time1);
             mAvatar = itemView.findViewById(R.id.item_list_avatar);
-            mAvatarImage = itemView.findViewById(R.id.item_list_avatar_image);
-            mCallType = itemView.findViewById(R.id.item_list_call_type);
+             mCallType = itemView.findViewById(R.id.item_list_call_type);
         }
 
         void bind(final CallDetails mCallDetials) {
@@ -193,33 +173,15 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyViewHo
 
                     String path = (Environment.getExternalStorageDirectory() + "") + Constants._file_location + mCallDetials.getDate() + "/" + mCallDetials.getNum() + "_" + mCallDetials.getTime() + Constants._file_format;
                     Log.d("path", "onClick: " + path);
-                    //                    Uri uri = Uri.parse(path);
+
                     Intent intent = new Intent(Intent.ACTION_VIEW);
                     File file = new File(path);
-                    //                    intent.setDataAndType(Uri.fromFile(file), "audio/*");
+
                     intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     intent.setDataAndType(getUriForFile(mContext, Constants.PACKAGE_NAME, file), "audio/*");
                     mContext.startActivity(intent);
 
                     pref.edit().putBoolean("pauseStateVLC", true).apply();
-
-                    /*FileInputStream fis=null;
-                    MediaPlayer mp=new MediaPlayer();
-                    try {
-                        fis=new FileInputStream(path);
-                        mp.setDataSource(fis.getFD());
-                        fis.close();
-                        mp.prepare();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    mp.start();
-                    mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                        @Override
-                        public void onCompletion(MediaPlayer mp) {
-                            mp.stop();
-                        }
-                    });*/
                 }
             });
 

@@ -21,30 +21,30 @@ public class CallReceiver extends PhoneStateReceiver {
 
     @Override
     protected void onIncomingCallStarted(Context mContext, String number, Date start) {
-        insertToDB(mContext, number, start, Constants.CAL_TYPE_INCOMING_CALL_START);
+        insertToDB(mContext, number, 0, Constants.CAL_TYPE_INCOMING_CALL_START);
     }
 
     @Override
     protected void onOutgoingCallStarted(Context mContext, String number, Date start) {
-        insertToDB(mContext, number, start, Constants.CAL_TYPE_OUT_GOING_CALL_START);
+        insertToDB(mContext, number, 0, Constants.CAL_TYPE_OUT_GOING_CALL_START);
     }
 
     @Override
     protected void onMissedCall(Context mContext, String number, Date start) {
-        insertToDB(mContext, number, start, Constants.CAL_TYPE_MISSED_CALL);
+        insertToDB(mContext, number, 0, Constants.CAL_TYPE_MISSED_CALL);
     }
 
     @Override
     protected void onIncomingCallEnded(Context mContext, String number, Date start, Date end) {
-        insertToDB(mContext, number, start, Constants.CAL_TYPE_INCOMING_CALL_END);
+        insertToDB(mContext, number, end.getTime() - start.getTime(), Constants.CAL_TYPE_INCOMING_CALL_END);
     }
 
     @Override
     protected void onOutgoingCallEnded(Context mContext, String number, Date start, Date end) {
-        insertToDB(mContext, number, start, Constants.CAL_TYPE_OUT_GOING_CALL_END);
+        insertToDB(mContext, number, end.getTime() - start.getTime(), Constants.CAL_TYPE_OUT_GOING_CALL_END);
     }
 
-    private void insertToDB(Context mContext, String number, Date start, int calType) {
+    private void insertToDB(Context mContext, String number, long mCallDuration, int calType) {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
 
         int serialNumber = pref.getInt(Constants.SERIAL_NUM_DATA, 1);
@@ -54,14 +54,15 @@ public class CallReceiver extends PhoneStateReceiver {
         callDetails.setCallType(calType);
         callDetails.setTime(CommonMethods.formatTime(new CommonMethods().getTIme()));
         callDetails.setDate(new CommonMethods().getDate());
+        callDetails.setDuration(mCallDuration);
 
         new DatabaseManager(mContext).addCallDetails(callDetails);
-        pref.edit().putInt("serialNumData", ++serialNumber).apply();
+        pref.edit().putInt(Constants.SERIAL_NUM_DATA, ++serialNumber).apply();
 
         List<CallDetails> list = new DatabaseManager(mContext).getAllDetails();
         for (CallDetails cd : list) {
             String log = "Serial Number : " + cd.getSerial() + " | Phone num : " + cd.getNum() + " | Time : " + cd.getTime() + " | Date : " + cd.getDate() + " | type : " + cd.getCallType();
-            Log.d("Databasez ", log);
+            Log.d("DataBase", log);
         }
     }
 }

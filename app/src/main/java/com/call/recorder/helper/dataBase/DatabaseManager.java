@@ -30,6 +30,7 @@ public class DatabaseManager {
         values.put(DatabaseHandler.SERIAL_NUMBER, callDetails.getSerial());
         values.put(DatabaseHandler.PHONE_NUMBER, callDetails.getNum());
         values.put(DatabaseHandler.CALL_TYPE, callDetails.getCallType());
+        values.put(DatabaseHandler.DURATION, callDetails.getDuration());
         values.put(DatabaseHandler.TIME, callDetails.getTime());
         values.put(DatabaseHandler.DATE, callDetails.getDate());
         sqLiteDatabase.insert(DatabaseHandler.TABLE_RECORD, null, values);
@@ -37,7 +38,7 @@ public class DatabaseManager {
 
     public List<CallDetails> getAllDetails() {
         List<CallDetails> recordList = new ArrayList<>();
-        String selectQuery = "SELECT * FROM " + DatabaseHandler.TABLE_RECORD + " WHERE callType in (" + Constants.CAL_TYPE_INCOMING_CALL_START + "," + Constants.CAL_TYPE_OUT_GOING_CALL_START + "," + Constants.CAL_TYPE_MISSED_CALL + ")";
+        String selectQuery = "SELECT * FROM " + DatabaseHandler.TABLE_RECORD + " WHERE callType in (" + Constants.CAL_TYPE_INCOMING_CALL_END + "," + Constants.CAL_TYPE_OUT_GOING_CALL_END + "," + Constants.CAL_TYPE_MISSED_CALL + ")";
 
         @SuppressLint("Recycle") Cursor cursor = sqLiteDatabase.rawQuery(selectQuery, null);
 
@@ -47,8 +48,9 @@ public class DatabaseManager {
                 callDetails.setSerial(cursor.getInt(0));
                 callDetails.setNum(cursor.getString(1));
                 callDetails.setCallType(Integer.parseInt(cursor.getString(2)));
-                callDetails.setTime(CommonMethods.formatTime(cursor.getString(3)));
-                callDetails.setDate(cursor.getString(4));
+                callDetails.setDuration(Long.parseLong(cursor.getString(3)));
+                callDetails.setTime(CommonMethods.formatTime(cursor.getString(4)));
+                callDetails.setDate(cursor.getString(5));
                 recordList.add(callDetails);
             } while (cursor.moveToNext());
         }
@@ -68,8 +70,9 @@ public class DatabaseManager {
                 callDetails.setSerial(cursor.getInt(0));
                 callDetails.setNum(cursor.getString(1));
                 callDetails.setCallType(Integer.parseInt(cursor.getString(2)));
-                callDetails.setTime(CommonMethods.formatTime(cursor.getString(3)));
-                callDetails.setDate(cursor.getString(4));
+                callDetails.setDuration(Long.parseLong(cursor.getString(3)));
+                callDetails.setTime(CommonMethods.formatTime(cursor.getString(4)));
+                callDetails.setDate(cursor.getString(5));
                 recordList.add(callDetails);
             } while (cursor.moveToNext());
         }

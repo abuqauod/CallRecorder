@@ -23,11 +23,10 @@ import com.call.recorder.ui.dialogs.DialogLongClick;
 import com.call.recorder.ui.models.CallDetails;
 
 import java.util.List;
-
-import de.hdodenhof.circleimageview.CircleImageView;
+import java.util.concurrent.TimeUnit;
 
 /**
- * Created by VS00481543 on 03-11-2017.
+ * Created by Mohammad on 08-11-1987.
  */
 
 public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyViewHolder> {
@@ -52,17 +51,9 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyViewHold
             case 0:
                 View v1 = mLayoutInflater.inflate(R.layout.item_list_record, parent, false);
                 return new MyViewHolder(v1);
-             /*case 1:
-                View v2 = mLayoutInflater.inflate(R.layout.record_noname_list, parent, false);
-                viewHolder = new MyViewHolder(v2);
-                break;*/
             case 2:
                 View v3 = mLayoutInflater.inflate(R.layout.date_layout, parent, false);
                 return new MyViewHolder(v3);
-             /*case 3:
-                View v4 = mLayoutInflater.inflate(R.layout.date_noname_layout, parent, false);
-                viewHolder = new MyViewHolder(v4);
-                break;*/
         }
         return null;
     }
@@ -82,20 +73,10 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyViewHold
             case 0:
                 loadView(name, holder, name2, holder.getAdapterPosition(), mCallDetails, n);
                 break;
-            /*case 1:
-                holder.mNumber.setText(callDetails.get(position).getNum());
-                holder.mTime.setText(callDetails.get(position).getTime());
-                break;*/
             case 2:
                 holder.mDate.setText(callDetails.get(position).getDate().replace("_", "/"));
                 loadView(name, holder, name2, holder.getAdapterPosition(), mCallDetails, n);
-
                 break;
-            /*case 3:
-                holder.mDate.setText(callDetails.get(position).getDate());
-                holder.mNumber.setText(callDetails.get(position).getNum());
-                holder.mTime.setText(callDetails.get(position).getTime());
-                break;*/
         }
     }
 
@@ -104,23 +85,17 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyViewHold
         if (name != null && !name.equals("")) {
             holder.mName.setText(name);
             holder.mName.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
-            //holder.mAvatar.setBackground(ContextCompat.getDrawable(mContext, R.mipmap.man));
-
-            holder.mAvatarImage.setVisibility(View.VISIBLE);
-            holder.mAvatar.setVisibility(View.GONE);
-
-            holder.mAvatarImage.setImageBitmap(CommonMethods.getContactPhoto(mContext, number));
-        } else {
+            holder.mAvatar.setBackground(ContextCompat.getDrawable(mContext, R.mipmap.man));
+         } else {
             holder.mName.setText(name2);
             holder.mName.setTextColor(mContext.getResources().getColor(R.color.red));
             holder.mAvatar.setBackground(ContextCompat.getDrawable(mContext, R.drawable.circle_grey));
             holder.mAvatar.setText(String.valueOf(name2.charAt(0)));
-            holder.mAvatarImage.setVisibility(View.GONE);
-            holder.mAvatar.setVisibility(View.VISIBLE);
-        }
+         }
         holder.mNumber.setText(callDetails.get(adapterPosition).getNum());
         holder.mTime.setText(callDetails.get(adapterPosition).getTime());
         holder.mCallType.setImageResource(getImageType(mCallDetails));
+        holder.mName.setText(holder.mName.getText() + " (" + String.format("%02d min, %02d sec", TimeUnit.MILLISECONDS.toMinutes(callDetails.get(adapterPosition).getDuration()), TimeUnit.MILLISECONDS.toSeconds(callDetails.get(adapterPosition).getDuration()) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(callDetails.get(adapterPosition).getDuration()))) + ")");
     }
 
     private int getImageType(CallDetails mCallDetails) {
@@ -128,8 +103,10 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyViewHold
             case Constants.CAL_TYPE_MISSED_CALL:
                 return R.drawable.ic_phone_missed_black_24dp;
             case Constants.CAL_TYPE_OUT_GOING_CALL_START:
+            case Constants.CAL_TYPE_OUT_GOING_CALL_END:
                 return R.drawable.ic_call_made_black_24dp;
             case Constants.CAL_TYPE_INCOMING_CALL_START:
+            case Constants.CAL_TYPE_INCOMING_CALL_END:
                 return R.drawable.ic_call_received_black_24dp;
 
         }
@@ -141,27 +118,13 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyViewHold
         String dt = cd.getDate();
         Log.d("Adapter", "getItemViewType: " + dt);
         Log.d("Adapter", "getItemViewType: " + pref.getString("mDate", ""));
-        // String checkDate=pref.getString("mDate","");
 
         try {
-            String checkDate = "";
             if (position != 0 && cd.getDate().equalsIgnoreCase(callDetails.get(position - 1).getDate())) {
-                checkDate = dt;
-                //pref.edit().putString("mDate",dt).apply();
                 Log.d("Adapter", "getItemViewType: in if condition" + pref.getString("mDate", ""));
                 return 0;
-                /*if(name1!=null && !name1.equals(""))
-                    return 0;
-                else
-                    return 1;*/
             } else {
-                checkDate = dt;
-                //pref.edit().putString("mDate",dt).apply();
                 Log.d("Adapter", "getItemViewType: in else condition" + pref.getString("mDate", ""));
-               /* if(name1!=null && !name1.equals(""))
-                    return 2;
-                else
-                    return 3;*/
                 return 2;
             }
         } catch (Exception e) {
@@ -178,7 +141,6 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyViewHold
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView mNumber, mTime, mDate, mName, mAvatar;
         ImageView mCallType;
-        CircleImageView mAvatarImage;
         View mSeparator;
 
         MyViewHolder(View itemView) {
@@ -189,7 +151,6 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyViewHold
             mNumber = itemView.findViewById(R.id.item_list_num);
             mTime = itemView.findViewById(R.id.item_list_time1);
             mAvatar = itemView.findViewById(R.id.item_list_avatar);
-            mAvatarImage = itemView.findViewById(R.id.item_list_avatar_image);
             mCallType = itemView.findViewById(R.id.item_list_call_type);
         }
 
@@ -203,46 +164,6 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyViewHold
                     b.putString(Constants._mobile_number, mCallDetials.getNum()); //Your id
                     intent.putExtras(b); //Put your id to your next Intent
                     mContext.startActivity(intent);
-
-
-                    // Toast.makeText(mContext, "Clicked on " + mCallDetials.getNum(), Toast.LENGTH_SHORT).show();
-
-                    // CallDetails callDetails = new CallDetails();
-                    // callDetails.setSerial(pref.getInt(Constants.SERIAL_NUM_DATA, 1));
-                    // callDetails.setNum(mCallDetials.getNum());
-                    // callDetails.setCallType(mCallDetials.getCallType());
-                    // callDetails.setTime(CommonMethods.formatTime(new CommonMethods().getTIme()));
-                    // callDetails.setDate(new CommonMethods().getDate());
-
-                    // String path = (Environment.getExternalStorageDirectory() + "") + Constants._file_location + mCallDetials.getDate() + "/" + mCallDetials.getNum() + "_" + mCallDetials.getTime() + Constants._file_format;
-                    // Log.d("path", "onClick: " + path);
-                    // //                    Uri uri = Uri.parse(path);
-                    // Intent intent = new Intent(Intent.ACTION_VIEW);
-                    // File file = new File(path);
-                    // //                    intent.setDataAndType(Uri.fromFile(file), "audio/*");
-                    // intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    // intent.setDataAndType(getUriForFile(mContext, Constants.PACKAGE_NAME, file), "audio/*");
-                    // mContext.startActivity(intent);
-
-                    // pref.edit().putBoolean("pauseStateVLC", true).apply();
-
-                    // /*FileInputStream fis=null;
-                    // MediaPlayer mp=new MediaPlayer();
-                    // try {
-                    //     fis=new FileInputStream(path);
-                    //     mp.setDataSource(fis.getFD());
-                    //     fis.close();
-                    //     mp.prepare();
-                    // } catch (IOException e) {
-                    //     e.printStackTrace();
-                    // }
-                    // mp.start();
-                    // mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                    //     @Override
-                    //     public void onCompletion(MediaPlayer mp) {
-                    //         mp.stop();
-                    //     }
-                    // });*/
                 }
             });
 

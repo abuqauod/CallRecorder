@@ -13,13 +13,15 @@
     <string name="call">CALL</string>
     <string name="share">SHARE</string>
     <string name="delete">DELETE</string>
-    <string name="mohammad_abuqauod">Mohammad AbuQauod</string>
-    <string name="ui_ux_designer_android_developer">UI/UX Designer | Android Developer</string>
-    <string name="follow_me">FOLLOW ME</string>
-    <string name="qauod_gmail_com">mqauod@gmail.com</string>
-    <string name="github_me">https://github.com/abuqauod/</string>
+    <string name="mohammad_abuqauod" translatable="false">Mohammad AbuQauod</string>
+    <string name="ui_ux_designer_android_developer" translatable="false">UI/UX Designer | Android Developer</string>
+    <string name="follow_me" translatable="false">FOLLOW ME</string>
+    <string name="qauod_gmail_com" translatable="false">mqauod@gmail.com</string>
+    <string name="github_me" translatable="false">https://github.com/abuqauod/</string>
     <string name="collections">Collections</string>
     <string name="_1782">1782</string>
     <string name="following">Following</string>
     <string name="followers">Followers</string>
+    <string name="interstitial_ad_app_id" translatable="false">ca-app-pub-3256827296248214~2373075491</string>
+    <string name="interstitial_ad_unit_id" translatable="false">ca-app-pub-3256827296248214/4665316470</string>
 </resources>

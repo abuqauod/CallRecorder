@@ -9,6 +9,10 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
     <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission
+        android:name="android.permission.CALL_PRIVILEGED"
+        tools:ignore="ProtectedPermissions"/>
 
 
     <application
@@ -20,6 +24,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="@string/interstitial_ad_app_id"/>
+
         <activity android:name=".ui.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -38,10 +47,8 @@
             android:name=".ui.services.CallReceiver"
             android:enabled="true">
             <intent-filter>
-                <action android:name="android.intent.action.PHONE_STATE"/>
-            </intent-filter>
-            <intent-filter>
                 <action android:name="android.intent.action.NEW_OUTGOING_CALL"/>
+                <action android:name="android.intent.action.PHONE_STATE"/>
             </intent-filter>
         </receiver>
 
