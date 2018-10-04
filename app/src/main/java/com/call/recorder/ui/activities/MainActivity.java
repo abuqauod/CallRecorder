@@ -25,15 +25,12 @@ import android.widget.Toast;
 import com.call.recorder.R;
 import com.call.recorder.helper.Constants;
 import com.call.recorder.helper.TextViewCustom;
-import com.call.recorder.helper.dataBase.DatabaseHandler;
 import com.call.recorder.helper.dataBase.DatabaseManager;
 import com.call.recorder.ui.adapters.RecordAdapter;
 import com.call.recorder.ui.models.CallDetails;
-import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
-import com.google.android.gms.ads.MobileAds;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,8 +38,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    final static String TAGMA = "Main Activity";
-    DatabaseHandler db = new DatabaseHandler(this);
     RecordAdapter rAdapter;
     RecyclerView mRecycler;
     LinearLayout mLayout;
@@ -52,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences mPreferences;
     SwitchCompat mSwitchCompat;
     View mMenuView;
+    private AdView adView;
     private InterstitialAd mInterstitialAd;
 
     @Override
@@ -60,24 +56,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         initControls();
-        /*StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-        StrictMode.setVmPolicy(builder.build());*/
-
-      /*  if(Build.VERSION.SDK_INT>=24){
-            try{
-                Method m = StrictMode.class.getMethod("disableDeathOnFileUriExposure");
-                m.invoke(null);
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-        }*/
-
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-        pref.edit().putInt("numOfCalls", 0).apply();
-
-        // pref.edit().putInt(Constants.SERIAL_NUM_DATA, 1).apply();
-
-        //rAdapter.notifyDataSetChanged();
         showInterstitial();
     }
 
@@ -99,42 +77,42 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showInterstitial() {
-        MobileAds.initialize(this);
+        adView = findViewById(R.id.adView);
+        //AdRequest adRequest = new AdRequest.Builder().build();
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).addTestDevice("DCB12029AC0105594F4CA445496C763D").build();
+        adView.loadAd(adRequest);
 
-        AdView mAdView = findViewById(R.id.adView);
-        mAdView.loadAd(new AdRequest.Builder().build());
+     //  mInterstitialAd = new InterstitialAd(this);
+     //  mInterstitialAd.setAdUnitId("ca-app-pub-8315069469881577/6726574852");
+     //  mInterstitialAd.loadAd(new AdRequest.Builder().build());
 
-        mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId(getResources().getString(R.string.ads_unit_id_interstitial));
-        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+     //  mInterstitialAd.setAdListener(new AdListener() {
+     //      @Override
+     //      public void onAdClosed() {
+     //          // Load the next interstitial.
+     //          mInterstitialAd.loadAd(new AdRequest.Builder().build());
+     //      }
 
-        mInterstitialAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdClosed() {
-                // Load the next interstitial.
-                mInterstitialAd.loadAd(new AdRequest.Builder().build());
-            }
+     //      @Override
+     //      public void onAdFailedToLoad(int errorCode) {
+     //          // initAdsMob();
+     //      }
 
-            @Override
-            public void onAdFailedToLoad(int errorCode) {
-                // initAdsMob();
-            }
+     //      @Override
+     //      public void onAdLeftApplication() {
+     //          // Code to be executed when the user has left the app.
+     //      }
 
-            @Override
-            public void onAdLeftApplication() {
-                // Code to be executed when the user has left the app.
-            }
+     //      @Override
+     //      public void onAdOpened() {
+     //          // Code to be executed when the ad is displayed.
+     //      }
 
-            @Override
-            public void onAdOpened() {
-                // Code to be executed when the ad is displayed.
-            }
-
-            @Override
-            public void onAdLoaded() {
-                mInterstitialAd.show();
-            }
-        });
+     //      @Override
+     //      public void onAdLoaded() {
+     //          mInterstitialAd.show();
+     //      }
+     //  });
     }
 
     public void startRecording(boolean isTurnItOn) {
@@ -144,7 +122,18 @@ public class MainActivity extends AppCompatActivity {
         mStartBtn.setText(isTurnItOn ? getString(R.string.call_recording_on) : getString(R.string.start_recording_call));
     }
 
+    @Override
+    public void onDestroy() {
+        if (adView != null) {
+            adView.destroy();
+        }
+        super.onDestroy();
+    }
+
     protected void onPause() {
+        if (adView != null) {
+            adView.pause();
+        }
         super.onPause();
         SharedPreferences pref3 = PreferenceManager.getDefaultSharedPreferences(this);
         if (pref3.getBoolean("pauseStateVLC", false)) {
@@ -154,9 +143,11 @@ public class MainActivity extends AppCompatActivity {
             checkResume = false;
     }
 
-
     @Override
     protected void onResume() {
+        if (adView != null) {
+            adView.resume();
+        }
         super.onResume();
 
         if (checkPermission()) {

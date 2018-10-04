@@ -17,4 +17,19 @@
     <string name="_1782">1782</string>
     <string name="following">Following</string>
     <string name="followers">Followers</string>
+
+    <string name="title_fingerprint">One-touch Sign In</string>
+    <string name="desc_fingerprint">Please place your fingertip on the scanner to verify your identity</string>
+    <string name="note">(Fingerprint sign in makes your app login much faster. Your device should have at least one fingerprint registered in device settings)</string>
+    <string name="ur_device_no_sensor">Your Device does not have a Fingerprint Sensor</string>
+    <string name="auth_permission_disabled">Fingerprint authentication permission disabled</string>
+    <string name="no_fingers_in_device">Register at least one fingerprint in Settings</string>
+    <string name="lock_screen_disabled">Lock screen security not enabled in Settings</string>
+    <string name="fingerprint_auth_error">Fingerprint Authentication error</string>
+    <string name="fingerprint_auth_help">Fingerprint Authentication help</string>
+    <string name="fingerprint_auth_failed">Fingerprint Authentication failed.</string>
+    <string name="fingerprint_auth_succeeded">Fingerprint Authentication succeeded.</string>
+    <string name="fingerprint_change">Change Finger Print</string>
+    <string name="fingerprint_enable_it">Enable Fingerprint Authentication?</string>
+
 </resources>

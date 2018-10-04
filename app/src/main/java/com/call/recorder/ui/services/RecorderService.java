@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.call.recorder.helper.CommonMethods;
-import com.call.recorder.helper.Constants;
 
 import java.io.IOException;
 
@@ -28,11 +27,7 @@ public class RecorderService extends Service {
         String phoneNumber = intent.getStringExtra("number");
         Log.d(TAGS, "Phone number in service: " + phoneNumber);
 
-        String time = new CommonMethods().getTIme();
-
-        String path = new CommonMethods().getPath(this);
-
-        String rec = path + "/" + phoneNumber + "_" + time + Constants._file_format;
+        String rec = new CommonMethods().getFinalFileName(phoneNumber);
 
         recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
